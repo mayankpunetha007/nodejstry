@@ -1,0 +1,44 @@
+<html>
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="js/app.js"></script>
+    <style>
+        .container{
+            width: 300px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body ng-app="myApp">
+<div class="container">
+    <div ng-controller="AppCtrl">
+        <h4>Login to Notes</h4>
+        <hr>
+        <form id="login-form" >
+            <input type="email" class="email form-control email" id="email-input" placeholder="Enter email">
+            <input type="password" class="password form-control password" id="password-input" placeholder="Password">
+            <label class="checkbox-inline">
+                <input type="checkbox" id="remember" value="Remember me"> Remember me
+            </label>
+            <input class="btn btn-block btn-lg btn-success submit" ng-click="login()" type="submit" value="Login">
+            <input class="btn btn-block btn-lg btn-info submit" ng-click= "register()" type="submit" value="Register">
+        </form>
+
+        <form hidden="true" id="registration-form">
+            <input type="email" ng-model="emailReg" class="email form-control email" id="email-register" placeholder="Enter email">
+            <input type="password" ng-model="passwordReg" class="password form-control password" id="password-register" placeholder="Password">
+            <input type="password"  ng-model="passwordConfirm" class="password form-control password" id="confirm-password-register" placeholder="Password">
+            <input class="btn btn-block btn-lg btn-info submit" ng-click= "registerNow()" type="submit" value="Register">
+            <strong hidden="true" class="alert alert-danger">>{{error}}</strong>
+        </form>
+
+    </div>
+</div>
+</body>
+
+
+</html>
