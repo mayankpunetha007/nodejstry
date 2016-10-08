@@ -3,6 +3,23 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+.task-list {
+  margin-top: 0;
+  padding-left: 0;
+  list-style: none;
+  width: 30%;
+  float: left;
+}
+
+.task-list li {
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.task-list .active {
+  border: 1px solid grey;
+}
+
+.task-list li:hover {
+  background: lightgrey;
 }

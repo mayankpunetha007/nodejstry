@@ -14,7 +14,7 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
             $scope.error = 'Password and confirm password do not match';
             return;
         }
-        $http.post('/register', {'username': $scope.emailReg, 'password': $scope.passwordReg});
+        $http.post('/register', {'username': $scope.emailReg, 'password': $scope.passwordReg, 'name':$scope.name});
     }
 
 }]);
