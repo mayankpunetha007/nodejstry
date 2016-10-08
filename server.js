@@ -21,7 +21,21 @@ app.use(bodyParser.json());
 
 
 
-app.get("/*", function(req, res){
+app.get("/", function(req, res){
+    if(commonutils.isSessionActive(req.session.id))
+        servingutil.servePage(res, './views/home.html');
+    else
+        servingutil.servePage(res, './views/index.html');
+});
+
+app.get("/index", function(req, res){
+    if(commonutils.isSessionActive(req.session.id))
+        servingutil.servePage(res, './views/home.html');
+    else
+        servingutil.servePage(res, './views/index.html');
+});
+
+app.get("/home", function(req, res){
     if(commonutils.isSessionActive(req.session.id))
         servingutil.servePage(res, './views/home.html');
     else
@@ -33,38 +47,35 @@ app.post('/register',  function (req, res) {
         commonutils.redirect(res, '/home');
     } else {
         var salt = servingutil.generateRandomString(128);
-        var passwordHash = servingutil.getPasswordHash(salt, req.body.password)
         var email = req.body.username;
-        datautil.addUser(req.session.id, res, {'name': req.body.name,'passwordhash': passwordHash, 'salt':salt, 'email':email});
+        datautil.addUser(req.session.id, res, {'name': req.body.name, 'salt':salt, 'email':email});
     }
 });
 
 
+app.post('/getUserInfo', commonutils.checkAuth,  function (req, res) {
+    if (commonutils.isSessionActive(req.session.id)) {
+        datautil.fetchUserInfo(req.session.id, req.body.from);
+    } else {
+        res.writeHead(403);
+        res.end();
+    }
+});
+
+app.post('/logout', commonutils.checkAuth,  function (req, res) {
+    commonutils.logoutSession(res, req.session.id);
+});
+
+
+
 app.post('/login', function (req, res) {
-    if (isUserloggedIn(req)) {
+    if (commonutils.isSessionActive(req.session.id)) {
         res.writeHead(302, {
             'Location': '/home'
         });
     } else {
-        model.User.findOne({
-            where: {email: req.body.email}
-        }).then(function(user) {
-            console.log(user.salt);
-            console.log(user.email);
-            if(getPasswordHash(user.salt, req.body.password) == user.passwordhash){
-                activeUsers[req.session.id] = user;
-                res.send(user);
-                res.end();
-            }else{
-                res.send("{success:false}")
-            }
-        })
+        datautil.logInUser(res, {'email':req.body.username,'password':req.body.password,'sessionId':req.session.id});
     }
-});
-
-app.get('/go', servingutil.checkAuth, function (req, res) {
-    res.send(JSON.stringify({'success': 'true'}));
-    res.end();
 });
 
 app.listen(3000);
