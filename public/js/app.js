@@ -17,4 +17,27 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
         $http.post('/register', {'username': $scope.emailReg, 'password': $scope.passwordReg, 'name':$scope.name});
     }
 
+    $scope.login = function () {
+        if ($scope.passwordReg !== $scope.passwordConfirm) {
+            $scope.error = 'Password and confirm password do not match';
+            return;
+        }
+        $http.post('/login', {'email': $scope.email, 'password': $scope.pass}).then(function (res) {
+            if(!res.success){
+
+            }else{
+                $window.location.href = "/home"
+            }
+        }).error(function(){
+
+        });
+    }
+
+    $scope.newTask = function() {
+        if ($scope.passwordReg !== $scope.passwordConfirm) {
+            $scope.error = 'Password and confirm password do not match';
+            return;
+        }
+    }
+
 }]);

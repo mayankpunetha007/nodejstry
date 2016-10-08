@@ -23,7 +23,7 @@ var User = sequelize.define('user', {
     salt:{
         type:Sequelize.STRING
     },
-    password:{
+    passwordhash:{
         type:Sequelize.STRING
     }
 });

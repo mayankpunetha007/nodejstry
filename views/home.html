@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YOUR NOTES</title>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="../public/stylesheets/style.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+</head>
+<body ng-app="myApp">
+<header>
+    <h1>Hi {{name}}</h1>
+</header>
+<div id="toolbar" class="toolbar">
+    <button type="button" class="btn btn-primary" id="new-button" ng-click="newTask">New</button>
+    <button type="button" class="btn btn-primary" id="save-button">Save</button>
+    <button type="button" class="btn btn-primary" id="delete-button">Delete</button>
+</div>
+<nav id="articles" class="tasks">
+    <ul id="tasks-ul" class="task-list">
+    </ul>
+</nav>
+<article id="editor" class="task-editor">
+    <label for="editor-title">Title</label>
+    <p class="title-error-messages"></p>
+    <input id="editor-title" class="task-subject" type="text"/> <label
+    <label for="editor-content">Content</label>
+    <textarea id="editor-content" class="task-content"></textarea>
+</article>
+</body>
+</html>
