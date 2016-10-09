@@ -5,16 +5,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.css" rel="stylesheet" />
+    <script src="https://code.angularjs.org/1.2.0/angular-animate.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.js"></script>
     <script src="js/login.js"></script>
-    <style>
-        .container{
-            width: 300px;
-            margin: auto;
-        }
-    </style>
 </head>
 <body ng-app="myApp">
 <div class="container" ng-controller="LoginCtrl">
+        <toaster-container toaster-options="{'time-out': 1000}"></toaster-container>
         <h4>Login to Notes</h4>
         <hr>
         <form id="login-form" >

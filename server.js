@@ -48,19 +48,38 @@ app.post('/register',  function (req, res) {
     } else {
         var salt = servingutil.generateRandomString(128);
         var email = req.body.username;
-        datautil.addUser(req.session.id, res, {'name': req.body.name, 'salt':salt, 'email':email});
+        datautil.addUser(req.session.id, res, {'name': req.body.name, 'pass':req.body.password, 'salt':salt, 'email':email});
     }
 });
 
 
-app.post('/getUserInfo', commonutils.checkAuth,  function (req, res) {
+app.get('/getTaskList', commonutils.checkAuth,  function (req, res) {
     if (commonutils.isSessionActive(req.session.id)) {
-        datautil.fetchUserInfo(req.session.id, req.body.from);
+        datautil.fetchTasks(res, req.session.id, req.body.from);
     } else {
         res.writeHead(403);
         res.end();
     }
 });
+
+app.post('/addTask', commonutils.checkAuth,  function (req, res) {
+    if (commonutils.isSessionActive(req.session.id)) {
+        datautil.addTask(res, req.session.id, req.body.subject, req.body.content);
+    } else {
+        res.writeHead(403);
+        res.end();
+    }
+});
+
+app.post('/updateTask', function (req, res) {
+    if (commonutils.isSessionActive(req.session.id)) {
+        datautil.updateTask(res, req.session.id, req.body.id, req.body.content);
+    } else {
+        res.writeHead(403);
+        res.end();
+    }
+});
+
 
 app.post('/logout', commonutils.checkAuth,  function (req, res) {
     commonutils.logoutSession(res, req.session.id);
@@ -74,7 +93,7 @@ app.post('/login', function (req, res) {
             'Location': '/home'
         });
     } else {
-        datautil.logInUser(res, {'email':req.body.username,'password':req.body.password,'sessionId':req.session.id});
+        datautil.logInUser(res, {'email':req.body.email,'password':req.body.password,'sessionId':req.session.id});
     }
 });
 

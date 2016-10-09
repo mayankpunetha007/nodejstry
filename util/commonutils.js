@@ -1,3 +1,4 @@
+var sha1 = require('sha1');
 exports.redirect = function(res, url){
     res.redirect(url)
     res.end();
@@ -35,4 +36,8 @@ exports.logoutSession = function (res, sessionId) {
     delete activeUsers[sessionId];
     res.send({success:true});
     res.end();
+};
+
+exports.getPasswordHash =  function(salt, password) {
+    return sha1(salt + password);
 }

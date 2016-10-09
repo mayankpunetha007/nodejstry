@@ -5,33 +5,54 @@
     <meta charset="UTF-8"/>
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.css" rel="stylesheet" />
+    <script src="https://code.angularjs.org/1.2.0/angular-animate.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.js"></script>
     <script src="js/app.js"></script>
 
 </head>
-<body ng-app="myApp" ng-controller="AppCtrl">
+<body ng-app="myApp" ng-init="init()" ng-controller="AppCtrl">
 <header>
     <h1>Hi {{name}}</h1>
 </header>
 <div id="toolbar" class="toolbar">
-    <button type="button" class="btn btn-primary" id="new-button" ng-click="newTask()">New Task</button>
+    <button type="button" class="btn btn-primary" id="new-button"  onclick="document.getElementById('subject').removeAttribute('hidden');">New Task</button>
     <button type="button" class="btn btn-primary" id="new-logout" ng-click="logout()">Logout</button>
+</div>
+<div id="subject"  hidden = "true" class="modal-content subject-modal">
+    <div  class="modal-body">
+        <input placeholder="Enter Subject For Task" ng-model="subject" style="margin: auto;"/>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" ng-click="newTask()">OK</button>
+        <button type="button" class="btn btn-default" onclick="document.getElementById('subject').setAttribute('hidden',true);">Close</button>
+    </div>
 </div>
 <div class="task-list">
     <div class="task" ng-repeat="task in tasks | orderBy:'createdOn'">
+        <div class="banner">
+            <div class="version">version {{task.version}}</div>
+            <div class="date">Created On: {{task.createdAt | date:"dd MMMM, yyyy 'at' h:mm"}}</div>
+            <div class="date">Last Edited: {{task.updatedAt| date:"dd MMMM, yyyy 'at' h:mm"}}</div>
+        </div>
         <div style="float: right">
             <i class="glyphicon glyphicon-ok" ng-if="task.edit == false"></i>
             <i class="glyphicon glyphicon-pencil" ng-if="task.edit == true"></i>
-            <i class="glyphicon glyphicon-trash del" ng-click="delete(task.length - $index - 1)"></i></span>
+            <i class="glyphicon glyphicon-warning-sign" ng-if="task.edit == error"></i>
+            <i class="glyphicon glyphicon-trash del" ng-click="delete(task.id)"></i></span>
         </div>
         <div class="subject">Subject: {{task.subject}}</div>
-        <div class="date">Created On: {{task.createdOn | date:"EEEE dd MMMM, yyyy 'at' h:mma"}}</div>
-        <div class="date">Last Edited: {{task.createdOn | date:"EEEE dd MMMM, yyyy 'at' h:mma"}}</div>
-        <div class="task-body" ng-model="note.text" ng-change="update(notes.length - $index - 1,note.text)"
-             ng-focus="task.edit = true" ng-blur="task.edit = false" markdown-editable contenteditable="true">{{
-            note.text }}
+        <div id="task-id-{{task.id}}" class="task-body" ng-model="task.content" ng-blur="update($index, task.id)" ng-focus="task.edit = true" markdown-editable contenteditable="true">{{task.content}}
         </div>
     </div>
 </div>
+
+
+    <!-- Modal content-->
+
+
+
 </body>
 </html>

@@ -12,19 +12,23 @@ var User = sequelize.define('user', {
         type:Sequelize.INTEGER,
         primaryKey:true,
         autoIncrement:true,
-
+        unique: true
     },
     name: {
         type: Sequelize.STRING
     },
     email: {
-        type:Sequelize.STRING
+        type:Sequelize.STRING,
+        unique: true,
+        allowNull: false
     },
     salt:{
-        type:Sequelize.STRING
+        type:Sequelize.STRING,
+        allowNull: false
     },
     passwordhash:{
-        type:Sequelize.STRING
+        type:Sequelize.STRING,
+        allowNull: false
     }
 });
 
@@ -34,21 +38,18 @@ var Task = sequelize.define('task', {
         primaryKey:true,
         autoIncrement:true
     },
-    date: {
-        type:Sequelize.STRING
-    },
     version:{
-        type:Sequelize.STRING
+        type:Sequelize.INTEGER
     },
     subject:{
         type:Sequelize.STRING
     },
     content:{
-        type:Sequelize.STRING
+        type:Sequelize.TEXT
     }
 });
 
-Task.belongsTo(User ,{foreignKey:'id'});
+User.hasMany(Task, { onDelete: 'SET NULL', onUpdate: 'CASCADE' });
 
 exports.Task = Task;
 exports.User = User;
