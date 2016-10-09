@@ -3,7 +3,7 @@ var fs = require('fs');
 
 exports.servePage = function(res, file){
     res.sendfile(file);
-}
+};
 
 
 exports.generateRandomString = function(length) {
@@ -11,5 +11,5 @@ exports.generateRandomString = function(length) {
         length: length,
         charset: 'alphabetic'
     });
-}
+};
 

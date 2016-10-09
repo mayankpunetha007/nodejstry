@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 var servingutil = require('./util/servingutil');
 var datautil = require('./util/datautil');
 var commonutils = require('./util/commonutils');
@@ -42,6 +42,21 @@ app.get("/home", function(req, res){
         servingutil.servePage(res, './views/index.html');
 });
 
+/**
+ * Get all notes for currently logged in user
+ */
+app.get('/getnoteList', commonutils.checkAuth,  function (req, res) {
+    if (commonutils.isSessionActive(req.session.id)) {
+        datautil.fetchnotes(res, req.session.id, req.body.from);
+    } else {
+        res.writeHead(403);
+        res.end();
+    }
+});
+
+/**
+ * Register a New User
+ */
 app.post('/register',  function (req, res) {
     if (commonutils.isSessionActive(req.session.id)) {
         commonutils.redirect(res, '/home');
@@ -53,27 +68,18 @@ app.post('/register',  function (req, res) {
 });
 
 
-app.get('/getTaskList', commonutils.checkAuth,  function (req, res) {
+app.post('/addnote', commonutils.checkAuth,  function (req, res) {
     if (commonutils.isSessionActive(req.session.id)) {
-        datautil.fetchTasks(res, req.session.id, req.body.from);
+        datautil.addnote(res, req.session.id, req.body.subject, req.body.content);
     } else {
         res.writeHead(403);
         res.end();
     }
 });
 
-app.post('/addTask', commonutils.checkAuth,  function (req, res) {
+app.post('/updatenote', function (req, res) {
     if (commonutils.isSessionActive(req.session.id)) {
-        datautil.addTask(res, req.session.id, req.body.subject, req.body.content);
-    } else {
-        res.writeHead(403);
-        res.end();
-    }
-});
-
-app.post('/updateTask', function (req, res) {
-    if (commonutils.isSessionActive(req.session.id)) {
-        datautil.updateTask(res, req.session.id, req.body.id, req.body.content);
+        datautil.updatenote(res, req.session.id, req.body.id, req.body.content);
     } else {
         res.writeHead(403);
         res.end();
@@ -94,6 +100,15 @@ app.post('/login', function (req, res) {
         });
     } else {
         datautil.logInUser(res, {'email':req.body.email,'password':req.body.password,'sessionId':req.session.id});
+    }
+});
+
+app.post('/deletenote', function (req, res) {
+    if (commonutils.isSessionActive(req.session.id)) {
+        datautil.deletenote(res, req.session.id, req.body.id);
+    } else {
+        res.statusCode(403);
+        res.end();
     }
 });
 

@@ -1,6 +1,6 @@
 var sha1 = require('sha1');
 exports.redirect = function(res, url){
-    res.redirect(url)
+    res.redirect(url);
     res.end();
 };
 
@@ -11,10 +11,8 @@ exports.addUser = function(sessionId, user){
 };
 
 exports.isSessionActive = function(sessionId) {
-  if(activeUsers[sessionId] !== undefined){
-      return true;
-  }
-  return false;
+  return activeUsers[sessionId] !== undefined;
+
 };
 
 exports.checkAuth = function(req, res, next) {
@@ -40,4 +38,4 @@ exports.logoutSession = function (res, sessionId) {
 
 exports.getPasswordHash =  function(salt, password) {
     return sha1(salt + password);
-}
+};

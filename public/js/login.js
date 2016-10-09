@@ -4,13 +4,17 @@ myApp.controller('LoginCtrl', ['$scope', '$http', 'toaster', function($scope, $h
     $scope.register = function () {
         var login = document.getElementById('login-form');
         login.setAttribute("hidden", true);
-        var login = document.getElementById('registration-form');
+        login = document.getElementById('registration-form');
         login.removeAttribute("hidden")
     };
 
     $scope.registerNow = function () {
         if ($scope.passwordReg !== $scope.passwordConfirm) {
-            $scope.error = 'Password and confirm password do not match';
+            toaster.pop({
+                type: 'error',
+                title: 'Password and confirm password do not match',
+                timeout: 1500
+            });
             return;
         }
         $http.post('/register', {
@@ -31,12 +35,12 @@ myApp.controller('LoginCtrl', ['$scope', '$http', 'toaster', function($scope, $h
                 login.setAttribute("hidden",true);
                 toaster.pop({
                     type: 'success',
-                    title: 'User Registered Please login?',
+                    title: 'User Registered Please login!',
                     timeout: 1500
                 });
             }
         })
-    }
+    };
 
     $scope.login = function () {
         $http.post('/login', {'email': $scope.email, 'password': $scope.pass}).then(function (res) {
@@ -50,10 +54,10 @@ myApp.controller('LoginCtrl', ['$scope', '$http', 'toaster', function($scope, $h
                 location.reload();
             }
         })
-    }
+    };
 
-    $scope.newTask = function () {
-        console.log('newTask');
+    $scope.newnote = function () {
+        console.log('newnote');
     }
 
 }]);

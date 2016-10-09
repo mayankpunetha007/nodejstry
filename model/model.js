@@ -1,11 +1,11 @@
 Sequelize = require('sequelize');
 var sequelize = new Sequelize('tasks', 'test', 'test123', {
     dialect: "postgres", // or 'sqlite', 'postgres', 'mariadb'
-    port:    5432, // or 5432 (for postgres)
+    port:    5432 // or 5432 (for postgres)
 });
 
 
-sequelize.authenticate().then(function(err) {console.log('Connection has been established successfully.');}, function (err) { console.log('Unable to connect to the database:', err);});
+sequelize.authenticate().then(function() {console.log('Database Connection has been established successfully.');}, function (err) { console.log('Unable to connect to the database:', err);});
 
 var User = sequelize.define('user', {
     id:{
@@ -32,7 +32,7 @@ var User = sequelize.define('user', {
     }
 });
 
-var Task = sequelize.define('task', {
+var note = sequelize.define('note', {
     id:{
         type:Sequelize.INTEGER,
         primaryKey:true,
@@ -49,9 +49,9 @@ var Task = sequelize.define('task', {
     }
 });
 
-User.hasMany(Task, { onDelete: 'SET NULL', onUpdate: 'CASCADE' });
+User.hasMany(note, { onDelete: 'SET NULL', onUpdate: 'CASCADE' });
 
-exports.Task = Task;
+exports.note = note;
 exports.User = User;
 
-sequelize.sync({ force: true }).then(function(err) {console.log('It worked!');}, function (err) {console.log('An error occurred while creating the table:', err);});
+exports.seq = sequelize

@@ -9,7 +9,7 @@ body{
   right:32px;
 }
 
-.task {
+.note {
   background: #eee;
   box-shadow: #999 1px 1px 3px;
   display: block;
@@ -24,7 +24,7 @@ body{
   flex-direction: column;
 }
 
-.task-list {
+.note-list {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -47,7 +47,7 @@ body{
   overflow-y: auto;
 }
 
-.task-body {
+.note-body {
   width: 100%;
   height: 75%;
 }
@@ -68,7 +68,7 @@ body{
   flex-direction: row;
 }
 
-.task-body{
+.note-body{
   margin: 2px;
   color: darkred;
   overflow: auto;
@@ -83,4 +83,8 @@ body{
 .banner{
   display: flex;
   flex-direction: column;
+}
+input{
+  margin:16px;
+  width:inherit;
 }

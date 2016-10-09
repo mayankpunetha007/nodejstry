@@ -18,33 +18,33 @@
     <h1>Hi {{name}}</h1>
 </header>
 <div id="toolbar" class="toolbar">
-    <button type="button" class="btn btn-primary" id="new-button"  onclick="document.getElementById('subject').removeAttribute('hidden');">New Task</button>
+    <button type="button" class="btn btn-primary" id="new-button"  onclick="document.getElementById('subject').removeAttribute('hidden');">New note</button>
     <button type="button" class="btn btn-primary" id="new-logout" ng-click="logout()">Logout</button>
 </div>
 <div id="subject"  hidden = "true" class="modal-content subject-modal">
     <div  class="modal-body">
-        <input placeholder="Enter Subject For Task" ng-model="subject" style="margin: auto;"/>
+        <input placeholder="Enter Subject For note" ng-model="subject" style="margin: auto;"/>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" ng-click="newTask()">OK</button>
+        <button type="button" class="btn btn-primary" ng-click="newnote()">OK</button>
         <button type="button" class="btn btn-default" onclick="document.getElementById('subject').setAttribute('hidden',true);">Close</button>
     </div>
 </div>
-<div class="task-list">
-    <div class="task" ng-repeat="task in tasks | orderBy:'createdOn'">
+<div class="note-list">
+    <div class="note" ng-repeat="note in notes | orderBy:'createdOn'">
         <div class="banner">
-            <div class="version">version {{task.version}}</div>
-            <div class="date">Created On: {{task.createdAt | date:"dd MMMM, yyyy 'at' h:mm"}}</div>
-            <div class="date">Last Edited: {{task.updatedAt| date:"dd MMMM, yyyy 'at' h:mm"}}</div>
+            <div class="version">version {{note.version}}</div>
+            <div class="date">Created On: {{note.createdAt | date:"dd MMMM, yyyy 'at' h:mm"}}</div>
+            <div class="date">Last Edited: {{note.updatedAt| date:"dd MMMM, yyyy 'at' h:mm"}}</div>
         </div>
         <div style="float: right">
-            <i class="glyphicon glyphicon-ok" ng-if="task.edit == false"></i>
-            <i class="glyphicon glyphicon-pencil" ng-if="task.edit == true"></i>
-            <i class="glyphicon glyphicon-warning-sign" ng-if="task.edit == error"></i>
-            <i class="glyphicon glyphicon-trash del" ng-click="delete(task.id)"></i></span>
+            <i class="glyphicon glyphicon-ok" ng-if="note.edit == false"></i>
+            <i class="glyphicon glyphicon-pencil" ng-if="note.edit == true"></i>
+            <i class="glyphicon glyphicon-warning-sign" ng-if="note.edit == error"></i>
+            <i class="glyphicon glyphicon-trash del" ng-click="delete($index, note.id)"></i></span>
         </div>
-        <div class="subject">Subject: {{task.subject}}</div>
-        <div id="task-id-{{task.id}}" class="task-body" ng-model="task.content" ng-blur="update($index, task.id)" ng-focus="task.edit = true" markdown-editable contenteditable="true">{{task.content}}
+        <div class="subject">Subject: {{note.subject}}</div>
+        <div id="note-id-{{note.id}}" class="note-body" ng-model="note.content" ng-blur="update($index, note.id)" ng-focus="note.edit = true" markdown-editable contenteditable="true">{{note.content}}
         </div>
     </div>
 </div>
