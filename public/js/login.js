@@ -1,13 +1,19 @@
 var myApp = angular.module('myApp', ['toaster']);
-myApp.controller('LoginCtrl', ['$scope', '$http', 'toaster', function($scope, $http, toaster) {
+myApp.controller('LoginCtrl', ['$scope', '$http', 'toaster', function ($scope, $http, toaster) {
 
+    /**
+     * Show Registeration form
+     */
     $scope.register = function () {
         var login = document.getElementById('login-form');
-        login.setAttribute("hidden", true);
+        login.setAttribute("hidden", 'true');
         login = document.getElementById('registration-form');
         login.removeAttribute("hidden")
     };
 
+    /**
+     * Gather user details and register
+     */
     $scope.registerNow = function () {
         if ($scope.passwordReg !== $scope.passwordConfirm) {
             toaster.pop({
@@ -30,9 +36,9 @@ myApp.controller('LoginCtrl', ['$scope', '$http', 'toaster', function($scope, $h
                 });
             } else {
                 var login = document.getElementById('login-form');
-                login.removeAttribute("hidden");
+                login.removeAttribute('hidden');
                 var login = document.getElementById('registration-form');
-                login.setAttribute("hidden",true);
+                login.setAttribute('hidden', 'true');
                 toaster.pop({
                     type: 'success',
                     title: 'User Registered Please login!',
@@ -42,6 +48,9 @@ myApp.controller('LoginCtrl', ['$scope', '$http', 'toaster', function($scope, $h
         })
     };
 
+    /**
+     * Gather user credentials and attempt login
+     */
     $scope.login = function () {
         $http.post('/login', {'email': $scope.email, 'password': $scope.pass}).then(function (res) {
             if (!res.data.success) {
@@ -55,9 +64,4 @@ myApp.controller('LoginCtrl', ['$scope', '$http', 'toaster', function($scope, $h
             }
         })
     };
-
-    $scope.newnote = function () {
-        console.log('newnote');
-    }
-
 }]);

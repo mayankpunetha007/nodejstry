@@ -1,28 +1,28 @@
 var sha1 = require('sha1');
-exports.redirect = function(res, url){
+var randomstring = require("randomstring");
+
+exports.redirect = function (res, url) {
     res.redirect(url);
-    res.end();
 };
 
 var activeUsers = {};
 
-exports.addUser = function(sessionId, user){
+exports.addUser = function (sessionId, user) {
     activeUsers[sessionId] = user;
 };
 
-exports.isSessionActive = function(sessionId) {
-  return activeUsers[sessionId] !== undefined;
+exports.isSessionActive = function (sessionId) {
+    return activeUsers[sessionId] !== undefined;
 
 };
 
-exports.checkAuth = function(req, res, next) {
+exports.checkAuth = function (req, res, next) {
     if (exports.isSessionActive(req.session.id))
         next();
     else {
         res.writeHead(302, {
             'Location': '/index'
         });
-        res.end();
     }
 };
 
@@ -32,10 +32,22 @@ exports.getUserDetails = function (sessionId) {
 
 exports.logoutSession = function (res, sessionId) {
     delete activeUsers[sessionId];
-    res.send({success:true});
-    res.end();
+    res.send({success: true});
 };
 
-exports.getPasswordHash =  function(salt, password) {
+exports.getPasswordHash = function (salt, password) {
     return sha1(salt + password);
 };
+
+exports.servePage = function (res, file) {
+    res.sendfile(file);
+};
+
+
+exports.generateRandomString = function (length) {
+    return randomstring.generate({
+        length: length,
+        charset: 'alphabetic'
+    });
+};
+

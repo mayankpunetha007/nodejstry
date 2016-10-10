@@ -5,31 +5,36 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.css" rel="stylesheet" />
-    <script src="https://code.angularjs.org/1.2.0/angular-animate.min.js" ></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.css" rel="stylesheet"/>
+    <script src="https://code.angularjs.org/1.2.0/angular-animate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.js"></script>
     <script src="js/login.js"></script>
 </head>
 <body ng-app="myApp">
 <div class="container" ng-controller="LoginCtrl">
-        <toaster-container toaster-options="{'time-out': 1000}"></toaster-container>
-        <h4>Login to Notes</h4>
-        <hr>
-        <form id="login-form" >
-            <input type="email" ng-model="email" class="email form-control email" id="email-input" placeholder="Enter email">
-            <input type="password" ng-model="pass" class="password form-control password" id="password-input" placeholder="Password">
-            <input class="btn btn-block btn-lg btn-success submit" ng-click="login()" type="submit" value="Login">
-            <input class="btn btn-block btn-lg btn-info submit" ng-click= "register()" type="submit" value="Register">
-        </form>
+    <toaster-container toaster-options="{'time-out': 1000}"></toaster-container>
+    <h4>Login to Notes</h4>
+    <hr>
+    <form id="login-form">
+        <input type="email" ng-model="email" class="email form-control email" id="email-input"
+               placeholder="Enter email">
+        <input type="password" ng-model="pass" class="password form-control password" id="password-input"
+               placeholder="Password">
+        <input class="btn btn-block btn-lg btn-success submit" ng-click="login()" type="submit" value="Login">
+        <input class="btn btn-block btn-lg btn-info submit" ng-click="register()" type="submit" value="Register">
+    </form>
 
-        <form hidden="true" id="registration-form">
-            <input type="text" ng-model="name" class="form-control" id="name-register" placeholder="Name">
-            <input type="email" ng-model="emailReg" class="email form-control email" id="email-register" placeholder="Enter email">
-            <input type="password" ng-model="passwordReg" class="password form-control password" id="password-register" placeholder="Password">
-            <input type="password"  ng-model="passwordConfirm" class="password form-control password" id="confirm-password-register" placeholder="Password">
-            <input class="btn btn-block btn-lg btn-info submit" ng-click= "registerNow()" type="submit" value="Register">
-            <strong hidden="true" class="alert alert-danger">>{{error}}</strong>
-        </form>
+    <form hidden="true" id="registration-form">
+        <input type="text" ng-model="name" class="form-control" id="name-register" placeholder="Name">
+        <input type="email" ng-model="emailReg" class="email form-control email" id="email-register"
+               placeholder="Enter email">
+        <input type="password" ng-model="passwordReg" class="password form-control password" id="password-register"
+               placeholder="Password">
+        <input type="password" ng-model="passwordConfirm" class="password form-control password"
+               id="confirm-password-register" placeholder="Password">
+        <input class="btn btn-block btn-lg btn-info submit" ng-click="registerNow()" type="submit" value="Register">
+        <strong hidden="true" class="alert alert-danger">>{{error}}</strong>
+    </form>
 </div>
 </body>
 

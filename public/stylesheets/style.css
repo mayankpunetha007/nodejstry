@@ -1,90 +1,108 @@
-body{
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+body {
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-.toolbar{
-  margin: 8px;
-  position: absolute;
-  top:16px;
-  right:32px;
+.toolbar {
+    margin: 8px;
+    position: absolute;
+    top: 16px;
+    right: 32px;
 }
 
 .note {
-  background: #eee;
-  box-shadow: #999 1px 1px 3px;
-  display: block;
-  overflow: auto;
-  margin: 32px;
-  position: relative;
-  background: #fdfdfd;
-  padding: 16px;
-  width:320px;
-  height:320px;
-  display: flex;
-  flex-direction: column;
+    background: #eee;
+    box-shadow: #999 1px 1px 3px;
+    display: block;
+    overflow: auto;
+    margin: 32px;
+    position: relative;
+    background: #fdfdfd;
+    padding: 16px;
+    width: 320px;
+    height: 320px;
+    display: flex;
+    flex-direction: column;
 }
 
 .note-list {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .date {
-  font-size: 0.7em;
-  font-style: italic;
-  color: #71CBD0;
-  height:5%;
-  margin: 2px;
+    font-size: 0.7em;
+    font-style: italic;
+    color: #71CBD0;
+    height: 5%;
+    margin: 2px;
 }
 
 .subject {
-  color: #71CBD0;
-  height: 10%;
-  font-weight: bold;
-  margin: 2px;
-  overflow-x: visible;
-  overflow-y: auto;
+    color: #71CBD0;
+    height: 10%;
+    font-weight: bold;
+    margin: 2px;
+    overflow-x: visible;
+    overflow-y: auto;
 }
 
 .note-body {
-  width: 100%;
-  height: 75%;
-}
-.glyphicon{
-  color: #71CBD0;
-  float: right;
-  margin:8px;
-}
-.del{
- cursor: pointer;
-}
-.subject-modal{
-  float: right;
-  width: 240px;
-}
-.modal-body{
-  display: flex;
-  flex-direction: row;
+    width: 100%;
+    height: 75%;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
-.note-body{
-  margin: 2px;
-  color: darkred;
-  overflow: auto;
+.glyphicon {
+    color: #71CBD0;
+    float: right;
+    margin: 8px;
+    cursor: pointer;
 }
-.version{
-  font-size: 0.7em;
-  font-style: italic;
-  color: #71CBD0;
-  margin: 2px;
-  height:5%;
+
+.del {
+    cursor: pointer;
 }
-.banner{
-  display: flex;
-  flex-direction: column;
+
+.subject-modal {
+    float: right;
+    width: 240px;
 }
-input{
-  margin:16px;
-  width:inherit;
+
+.modal-body {
+    display: flex;
+    flex-direction: row;
+}
+
+.note-body {
+    margin: 2px;
+    color: darkred;
+    overflow: auto;
+}
+
+.version {
+    font-size: 0.7em;
+    font-style: italic;
+    color: #71CBD0;
+    margin: 2px;
+    height: 5%;
+}
+
+.banner {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    margin: 16px;
+    width: inherit;
+}
+
+.danger {
+    color: red;
+}
+
+[contentEditable=true]:empty:not(:focus):before {
+    content: attr(data-text)
 }

@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.css" rel="stylesheet" />
-    <script src="https://code.angularjs.org/1.2.0/angular-animate.min.js" ></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.css" rel="stylesheet"/>
+    <script src="https://code.angularjs.org/1.2.0/angular-animate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.js"></script>
     <script src="js/app.js"></script>
 
@@ -18,16 +18,20 @@
     <h1>Hi {{name}}</h1>
 </header>
 <div id="toolbar" class="toolbar">
-    <button type="button" class="btn btn-primary" id="new-button"  onclick="document.getElementById('subject').removeAttribute('hidden');">New note</button>
+    <button type="button" class="btn btn-primary" id="new-button"
+            onclick="document.getElementById('subject').removeAttribute('hidden');">New note
+    </button>
     <button type="button" class="btn btn-primary" id="new-logout" ng-click="logout()">Logout</button>
 </div>
-<div id="subject"  hidden = "true" class="modal-content subject-modal">
-    <div  class="modal-body">
+<div id="subject" hidden="true" class="modal-content subject-modal">
+    <div class="modal-body">
         <input placeholder="Enter Subject For note" ng-model="subject" style="margin: auto;"/>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" ng-click="newnote()">OK</button>
-        <button type="button" class="btn btn-default" onclick="document.getElementById('subject').setAttribute('hidden',true);">Close</button>
+        <button type="button" class="btn btn-default"
+                onclick="document.getElementById('subject').setAttribute('hidden','true');">Close
+        </button>
     </div>
 </div>
 <div class="note-list">
@@ -38,20 +42,22 @@
             <div class="date">Last Edited: {{note.updatedAt| date:"dd MMMM, yyyy 'at' h:mm"}}</div>
         </div>
         <div style="float: right">
-            <i class="glyphicon glyphicon-ok" ng-if="note.edit == false"></i>
-            <i class="glyphicon glyphicon-pencil" ng-if="note.edit == true"></i>
-            <i class="glyphicon glyphicon-warning-sign" ng-if="note.edit == error"></i>
-            <i class="glyphicon glyphicon-trash del" ng-click="delete($index, note.id)"></i></span>
+            <i class="glyphicon glyphicon-floppy-save" title="save" ng-click="update($index, note.id)"
+               ng-if="note.edit == true"></i>
+            <i class="glyphicon glyphicon-pencil" title="edit" ng-click="edit(note.id)" ng-if="note.edit == false"></i>
+            <i class="glyphicon glyphicon-warning-sign danger" ng-click="update($index, note.id)" title="Failed Retry?"
+               ng-if="note.edit === 'error'"></i>
+            <i class="glyphicon glyphicon-trash del" title="Delete" ng-click="delete($index, note.id)"></i></span>
         </div>
         <div class="subject">Subject: {{note.subject}}</div>
-        <div id="note-id-{{note.id}}" class="note-body" ng-model="note.content" ng-blur="update($index, note.id)" ng-focus="note.edit = true" markdown-editable contenteditable="true">{{note.content}}
+        <div id="note-id-{{note.id}}" contentEditable=true data-text="Enter text here" class="note-body"
+             ng-model="note.content" ng-blur="isChanged($index, note.id)">{{note.content}}
         </div>
     </div>
 </div>
 
 
-    <!-- Modal content-->
-
+<!-- Modal content-->
 
 
 </body>
