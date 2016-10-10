@@ -1,23 +1,28 @@
 body {
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    background: #f1f1f1;
 }
 
 .toolbar {
     margin: 8px;
     position: absolute;
-    top: 16px;
+    top: 8px;
     right: 32px;
 }
 
+input {
+    margin: 16px 0px 0px 0px;
+}
+
 .note {
-    background: #eee;
-    box-shadow: #999 1px 1px 3px;
-    display: block;
-    overflow: auto;
+    background: #ffff99;
+    border: 1px solid #FFFF36;
+    border-radius: 8px;
+    overflow-y: auto;
     margin: 32px;
+    overflow-x: hidden;
     position: relative;
-    background: #fdfdfd;
-    padding: 16px;
+    padding: 0px;
     width: 320px;
     height: 320px;
     display: flex;
@@ -28,6 +33,17 @@ body {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background: aliceblue;
+    width: 90%;
+    margin: auto;
+    min-height: 720px;
+}
+
+a{
+    cursor:pointer;
 }
 
 .date {
@@ -48,10 +64,16 @@ body {
 }
 
 .note-body {
-    width: 100%;
-    height: 75%;
+    color: darkred;
+    overflow: auto;
+    height: 200px;
+    width: 318px;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: visible;
+    background: #ffff99;
+    border: none;
+    resize: none;
+    border-radius: 8px;
 }
 
 .glyphicon {
@@ -75,12 +97,6 @@ body {
     flex-direction: row;
 }
 
-.note-body {
-    margin: 2px;
-    color: darkred;
-    overflow: auto;
-}
-
 .version {
     font-size: 0.7em;
     font-style: italic;
@@ -94,15 +110,72 @@ body {
     flex-direction: column;
 }
 
-input {
-    margin: 16px;
-    width: inherit;
-}
-
 .danger {
     color: red;
 }
 
 [contentEditable=true]:empty:not(:focus):before {
     content: attr(data-text)
+}
+
+.btn {
+    width: 149px;
+    float: right;
+}
+
+.container {
+    width: 640px;
+    height: 420px;
+    background: #ffff99;
+    border: 1px solid #FFFF36;
+    margin: auto;
+    margin-top: 160px;
+    padding: 32px;
+    color: black;
+    border-radius: 8px;
+    -webkit-transition: opacity 1s ease-in-out;
+    -moz-transition: opacity 1s ease-in-out;
+    -o-transition: opacity 1s ease-in-out;
+    transition: opacity 1s ease-in-out;
+}
+
+.login-title {
+    margin-top: -32px;
+    margin-bottom: 40px;
+    margin-left: -32px;
+    padding: 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    font-family: cursive;
+    color: brown;
+    font-size: 14px;
+}
+
+.icon-large {
+    z-index: 1;
+    font-size: 4em;
+    transform: rotate(270deg);
+    margin-top: -56px;
+    margin-left: -58px;
+    color: darkred;
+    margin-right: -8px;
+}
+
+textarea:focus {
+    border-radius: 8px;
+    border: 1px solid #FFFF36;
+}
+
+.tab-pane{
+    padding: 12px 48px;
+    background: #FFFF8A;
+    -webkit-transition: opacity 1s ease-in-out;
+    -moz-transition: opacity 1s ease-in-out;
+    -o-transition: opacity 1s ease-in-out;
+    transition: opacity 1s ease-in-out;
+    height: 280px;
+}
+.btn{
+    margin:8px;
 }

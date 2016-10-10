@@ -1,7 +1,7 @@
 <html>
 <head>
+    <link rel='shortcut icon' href='/favicon.ico' type='image/x-icon'/>
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
@@ -9,32 +9,62 @@
     <script src="https://code.angularjs.org/1.2.0/angular-animate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.js"></script>
     <script src="js/login.js"></script>
+    <script>
+        /**
+         * Show Registeration form
+         */
+        register = function (status) {
+            var hide = 'login-form';
+            var show = 'registration-form';
+            var active = 'register-tab';
+            var inactive = 'login-tab';
+            if (status == false) {
+                hide = 'registration-form';
+                show = 'login-form';
+                active = 'login-tab';
+                inactive = 'register-tab';
+            }
+            document.getElementById(hide).setAttribute('hidden', 'true');
+            document.getElementById(show).removeAttribute('hidden');
+            document.getElementById(active).classList.add('active');
+            document.getElementById(inactive).classList.remove('active');
+
+        };
+    </script>
 </head>
 <body ng-app="myApp">
 <div class="container" ng-controller="LoginCtrl">
+    <div class="login-title"><i class="glyphicon glyphicon-pushpin icon-large"></i>Your personal Note Keeper</div>
     <toaster-container toaster-options="{'time-out': 1000}"></toaster-container>
-    <h4>Login to Notes</h4>
-    <hr>
-    <form id="login-form">
-        <input type="email" ng-model="email" class="email form-control email" id="email-input"
-               placeholder="Enter email">
-        <input type="password" ng-model="pass" class="password form-control password" id="password-input"
-               placeholder="Password">
-        <input class="btn btn-block btn-lg btn-success submit" ng-click="login()" type="submit" value="Login">
-        <input class="btn btn-block btn-lg btn-info submit" ng-click="register()" type="submit" value="Register">
-    </form>
+    <ul class="nav nav-tabs">
+        <li id="login-tab" class="active"><a onclick="register(false)">Login</a></li>
+        <li id="register-tab"><a onclick="register(true);">Register</a></li>
+    </ul>
 
-    <form hidden="true" id="registration-form">
-        <input type="text" ng-model="name" class="form-control" id="name-register" placeholder="Name">
-        <input type="email" ng-model="emailReg" class="email form-control email" id="email-register"
-               placeholder="Enter email">
-        <input type="password" ng-model="passwordReg" class="password form-control password" id="password-register"
-               placeholder="Password">
-        <input type="password" ng-model="passwordConfirm" class="password form-control password"
-               id="confirm-password-register" placeholder="Password">
-        <input class="btn btn-block btn-lg btn-info submit" ng-click="registerNow()" type="submit" value="Register">
-        <strong hidden="true" class="alert alert-danger">>{{error}}</strong>
-    </form>
+    <div id="login-form" class="tab-pane fade in active">
+        <form>
+            <input type="email" ng-model="email" class="email form-control email" id="email-input"
+                   placeholder="Enter username">
+            <input type="password" ng-model="pass" class="password form-control password" id="password-input"
+                   placeholder="Password">
+            <input class="btn btn-lg btn-success submit" ng-click="login()" type="submit" value="Login">
+        </form>
+    </div>
+
+    <div id="registration-form" hidden class="tab-pane fade in active">
+        <form>
+            <input type="text" ng-model="name" class="form-control" id="name-register" placeholder="Name">
+            <input ng-model="emailReg" class="email form-control email" id="email-register"
+                   placeholder="Enter desired username">
+            <input type="password" ng-model="passwordReg" class="password form-control password" id="password-register"
+                   placeholder="Password">
+            <input type="password" ng-model="passwordConfirm" class="password form-control password"
+                   id="confirm-password-register" placeholder="Password">
+            <input class="btn btn-lg btn-info submit" ng-click="registerNow()" type="submit" value="Register">
+            <strong hidden="true" class="alert alert-danger">>{{error}}</strong>
+        </form>
+    </div>
+
 </div>
 </body>
 

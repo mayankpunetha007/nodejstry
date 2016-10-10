@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel='shortcut icon' href='/favicon.ico' type='image/x-icon'/>
     <title>YOUR NOTES</title>
     <meta charset="UTF-8"/>
     <link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.css" rel="stylesheet"/>
     <script src="https://code.angularjs.org/1.2.0/angular-animate.min.js"></script>
@@ -14,8 +14,9 @@
 
 </head>
 <body ng-app="myApp" ng-init="init()" ng-controller="AppCtrl">
+<toaster-container toaster-options="{'time-out': 1000}"></toaster-container>
 <header>
-    <h1>Hi {{name}}</h1>
+    <h1>{{name}}'s Notes</h1>
 </header>
 <div id="toolbar" class="toolbar">
     <button type="button" class="btn btn-primary" id="new-button"
@@ -36,12 +37,7 @@
 </div>
 <div class="note-list">
     <div class="note" ng-repeat="note in notes | orderBy:'createdOn'">
-        <div class="banner">
-            <div class="version">version {{note.version}}</div>
-            <div class="date">Created On: {{note.createdAt | date:"dd MMMM, yyyy 'at' h:mm"}}</div>
-            <div class="date">Last Edited: {{note.updatedAt| date:"dd MMMM, yyyy 'at' h:mm"}}</div>
-        </div>
-        <div style="float: right">
+        <div>
             <i class="glyphicon glyphicon-floppy-save" title="save" ng-click="update($index, note.id)"
                ng-if="note.edit == true"></i>
             <i class="glyphicon glyphicon-pencil" title="edit" ng-click="edit(note.id)" ng-if="note.edit == false"></i>
@@ -49,10 +45,15 @@
                ng-if="note.edit === 'error'"></i>
             <i class="glyphicon glyphicon-trash del" title="Delete" ng-click="delete($index, note.id)"></i></span>
         </div>
-        <div class="subject">Subject: {{note.subject}}</div>
-        <div id="note-id-{{note.id}}" contentEditable=true data-text="Enter text here" class="note-body"
-             ng-model="note.content" ng-blur="isChanged($index, note.id)">{{note.content}}
+        <div class="banner">
+            <div class="version">version {{note.version}}</div>
+            <div class="date">Created On: {{note.createdAt | date:"dd MMMM, yyyy 'at' h:mm"}}</div>
+            <div class="date">Last Edited: {{note.updatedAt| date:"dd MMMM, yyyy 'at' h:mm"}}</div>
         </div>
+        <div class="subject">Subject: {{note.subject}}</div>
+        <textarea id="note-id-{{note.id}}" contentEditable=true data-text="Enter text here" class="note-body"
+                  ng-model="note.content" ng-blur="isChanged($index, note.id)">{{note.content}}
+        </textarea>
     </div>
 </div>
 

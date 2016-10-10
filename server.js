@@ -30,9 +30,9 @@ var allowedUrls = ['/login', '/register'];
 app.use('/', function (req, res, next) {
     if (serveUrls.indexOf(req.originalUrl) > -1) {
         if (commonutils.isSessionActive(req.session.id))
-            commonutils.servePage(res, './views/home.html');
+            commonutils.servePage(res, __dirname + '/views/home.html');
         else
-            commonutils.servePage(res, './views/index.html');
+            commonutils.servePage(res, __dirname + '/views/index.html');
     }
     else if (allowedUrls.indexOf(req.originalUrl) > -1)
         next();
@@ -73,7 +73,10 @@ app.post('/register', function (req, res) {
  * Create a new note with empty content
  */
 app.post('/addnote', function (req, res) {
-    datautil.addnote(res, req.session.id, req.body.subject, req.body.content);
+    if (req.body.subject != null && req.body.subject.length == 0)
+        res.send({"success": false, "message": "Cannot add an empty Subject"});
+    else
+        datautil.addnote(res, req.session.id, req.body.subject, req.body.content);
 });
 
 /**
@@ -94,13 +97,10 @@ app.post('/logout', function (req, res) {
  * Check user sent username and password and login the user
  */
 app.post('/login', function (req, res) {
-    if (commonutils.isSessionActive(req.session.id)) {
-        res.writeHead(302, {
-            'Location': '/home'
-        });
-    } else {
+    if (commonutils.isSessionActive(req.session.id))
+        res.writeHead(302, {'Location': '/home'});
+    else
         datautil.logInUser(res, {'email': req.body.email, 'password': req.body.password, 'sessionId': req.session.id});
-    }
 });
 
 /**

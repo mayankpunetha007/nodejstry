@@ -2,16 +2,6 @@ var myApp = angular.module('myApp', ['toaster']);
 myApp.controller('LoginCtrl', ['$scope', '$http', 'toaster', function ($scope, $http, toaster) {
 
     /**
-     * Show Registeration form
-     */
-    $scope.register = function () {
-        var login = document.getElementById('login-form');
-        login.setAttribute("hidden", 'true');
-        login = document.getElementById('registration-form');
-        login.removeAttribute("hidden")
-    };
-
-    /**
      * Gather user details and register
      */
     $scope.registerNow = function () {
@@ -31,14 +21,11 @@ myApp.controller('LoginCtrl', ['$scope', '$http', 'toaster', function ($scope, $
             if (!res.data.success) {
                 toaster.pop({
                     type: 'error',
-                    title: 'Failed to register User. Does user already exist?',
+                    title: res.data.message ? res.data.message : 'Failed to register User. Does user already exist?',
                     timeout: 1500
                 });
             } else {
-                var login = document.getElementById('login-form');
-                login.removeAttribute('hidden');
-                var login = document.getElementById('registration-form');
-                login.setAttribute('hidden', 'true');
+                register(false);
                 toaster.pop({
                     type: 'success',
                     title: 'User Registered Please login!',
@@ -56,7 +43,7 @@ myApp.controller('LoginCtrl', ['$scope', '$http', 'toaster', function ($scope, $
             if (!res.data.success) {
                 toaster.pop({
                     type: 'error',
-                    title: 'Check Username Passwaord',
+                    title: res.data.message ? res.data.message : 'Check Username Passwaord',
                     timeout: 1500
                 });
             } else {

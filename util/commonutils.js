@@ -40,7 +40,7 @@ exports.getPasswordHash = function (salt, password) {
 };
 
 exports.servePage = function (res, file) {
-    res.sendfile(file);
+    res.sendFile(file);
 };
 
 

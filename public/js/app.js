@@ -24,7 +24,7 @@ myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $ht
             if (!res.data.success) {
                 toaster.pop({
                     type: 'error',
-                    title: 'Failed to add note',
+                    title: res.data.message ? res.data.message : 'Failed to add note',
                     timeout: 1500
                 });
             } else {
@@ -52,8 +52,16 @@ myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $ht
             } else {
                 location.reload();
             }
+        }, function (error) {
+            toaster.pop({
+                type: 'error',
+                title: 'Are you even logged in?',
+                timeout: 1500
+            });
+            location.reload();
         });
     };
+
 
     /**
      * Delete the note specified by
@@ -117,13 +125,18 @@ myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $ht
             });
             return;
         }
-        var newContent = document.getElementById('note-id-' + id).innerText;
+        var newContent = document.getElementById('note-id-' + id).value;
         $http.post('/updatenote', {'id': id, 'content': newContent}).then(function (res) {
             if (!res.data.success) {
                 $scope.notes[index].edit = error
             } else {
                 $scope.notes[index] = res.data.note;
                 $scope.notes[index].edit = false;
+                toaster.pop({
+                    type: 'info',
+                    title: 'Note Succesfully Updated',
+                    timeout: 1500
+                });
             }
         }, function errorCallback(response) {
             toaster.pop({

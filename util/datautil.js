@@ -17,7 +17,10 @@ exports.addUser = function (sessionId, res, user) {
             });
             res.send({'success': true});
         }
+    }).catch(function (err) {
+        res.send({"success": false, "message": "internal server Error"});
     });
+    ;
 };
 
 
@@ -30,7 +33,10 @@ exports.fetchnotes = function (res, sessionId) {
             noteList.push(noteInfo);
         }
         res.send({'name': userDetails.name, 'noteList': noteList});
+    }).catch(function (err) {
+        res.send({"success": false, "message": "internal server Error"});
     });
+    ;
 };
 
 exports.deletenote = function (res, sessionId, id) {
@@ -45,8 +51,10 @@ exports.deletenote = function (res, sessionId, id) {
             });
         }
         else {
-            res.status({'success': false});
+            res.status({'success': false, 'message': 'Is the note already deleted?'});
         }
+    }).catch(function (err) {
+        res.send({"success": false, "message": "internal server Error"});
     });
 };
 
@@ -59,6 +67,8 @@ exports.addnote = function (res, sessionId, subject, content) {
         userId: userDetails.id
     }).then(function (note) {
         res.send({"success": true, "note": note});
+    }).catch(function (err) {
+        res.send({"success": false, "message": "internal server Error"});
     });
 };
 
@@ -69,23 +79,27 @@ exports.updatenote = function (res, sessionId, noteId, noteContent) {
     }).then(function (dbnote) {
         if (dbnote) {
             var note = dbnote.dataValues;
-            model.note.update({content: noteContent, version: note.version + 1},
-                {where: {id: note.id}}).then(function (notes) {
-                console.log(notes);
-                note.content = noteContent;
-                note.version = note.version + 1;
-                res.send({'success': true, 'note': note});
-            })
+            if (note.content === noteContent) {
+                res.send({'success': false, 'message': 'Nothing to update'});
+            } else {
+                model.note.update({content: noteContent, version: note.version + 1},
+                    {where: {id: note.id}, returning: true}).then(function (notes) {
+                    note = notes[1][0].dataValues;
+                    res.send({'success': true, 'note': note});
+                });
+            }
         }
         else {
             res.status(403);
         }
+    }).catch(function (err) {
+        res.send({"success": false, "message": "internal server Error"});
     });
 };
 
 exports.logInUser = function (res, user) {
-    if (user.email === undefined) {
-        res.send("{success:false}");
+    if (user.email === undefined || user.email.length == 0) {
+        res.send({success: false, 'message': 'Username Cannot be empty'});
     } else {
         model.User.findOne({where: {email: user.email}}).then(function (userDb) {
             if (userDb !== undefined && userDb != null) {
@@ -95,12 +109,12 @@ exports.logInUser = function (res, user) {
                 if (passwordHash === userFromDb.passwordhash) {
                     utils.addUser(user.sessionId, userFromDb);
                     res.send({"success": true});
+                    return;
                 }
             }
-            throw ("Username or Pass Invalid");
+            res.send({'success': false, 'message': "Username/Password Combination is invalid"});
         }).catch(function (err) {
-            console.log(err);
-            res.send({"success": false});
+            res.send({"success": false, "message": "internal server Error"});
         });
     }
 };
