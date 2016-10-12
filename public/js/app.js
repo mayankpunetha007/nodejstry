@@ -7,11 +7,14 @@ myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $ht
      */
     $scope.init = function () {
         $http.get('/getnoteList').then(function (res) {
+            var notes = res.data.noteList;
+            for (var i = 0; i < notes.length; i++) {
+                notes[i]['edit'] = true;
+                notes[i]['tempContent'] = notes[i].content;
+            }
             $scope.name = res.data.name;
             $scope.notes = res.data.noteList;
-            for (var i = 0; i < $scope.notes.length; i++) {
-                $scope.notes[i].edit = false;
-            }
+
         });
     };
 
@@ -30,7 +33,7 @@ myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $ht
             } else {
                 var input = document.getElementById('subject');
                 input.getElementsByTagName('input')[0].value = '';
-                input.setAttribute('hidden', "true");
+                input.setAttribute('hidden', 'true');
                 res.data.note.edit = false;
                 $scope.notes.push(res.data.note);
                 toaster.pop({
@@ -66,12 +69,11 @@ myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $ht
     /**
      * Delete the note specified by
      * @param i Index of note in angular data notes array
-     * @param id Id for the note as stroed in db
      */
-    $scope.delete = function (i, id) {
-        var r = confirm("Are you sure you want to delete this note?");
+    $scope.delete = function (i) {
+        var r = confirm('Are you sure you want to delete this note?');
         if (r == true) {
-            $http.post('/deletenote', {'id': id}).then(function (res) {
+            $http.post('/deletenote', {'id': $scope.notes[i].id}).then(function (res) {
                 if (!res.data.success) {
                     toaster.pop({
                         type: 'error',
@@ -87,37 +89,36 @@ myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $ht
 
     /**
      * Edit the current note of
-     * @param id Id for the note
+     * @param $index $index for the note
      */
-    $scope.edit = function (id) {
-        var newContent = document.getElementById('note-id-' + id);
-        newContent.val(newContent.val());
+    $scope.edit = function ($index) {
+        var newContent = document.getElementById('note-id-' + $scope.notes[$index].id);
+        var temp = newContent.value;
+        newContent.value = '';
+        newContent.value = temp;
         newContent.focus();
     };
 
     /**
      * Check if there are any changes to the note specified by
      * @param index Angular data index
-     * @param id The id for the note as in db
      * @returns {boolean} True if the data is different
      */
-    $scope.isChanged = function (index, id) {
-        var newContent = document.getElementById('note-id-' + id).innerText;
-        if (newContent == $scope.notes[index].content) {
-            $scope.notes[index].edit = false;
+    $scope.isChanged = function (index) {
+        if ($scope.notes[index].tempContent == $scope.notes[index].content) {
+            $scope.notes[index].edit = true;
             return false;
         }
-        $scope.notes[index].edit = true;
+        $scope.notes[index].edit = false;
         return true;
     };
 
     /**
      * Update the content of the note specified by
      * @param index Angular data index for notes
-     * @param id Id of the note
      */
-    $scope.update = function (index, id) {
-        if (!$scope.isChanged(index, id)) {
+    $scope.update = function (index) {
+        if (!$scope.isChanged(index)) {
             toaster.pop({
                 type: 'warn',
                 title: 'Nothing to update',
@@ -125,13 +126,20 @@ myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $ht
             });
             return;
         }
+        var id = $scope.notes[index].id;
         var newContent = document.getElementById('note-id-' + id).value;
         $http.post('/updatenote', {'id': id, 'content': newContent}).then(function (res) {
             if (!res.data.success) {
-                $scope.notes[index].edit = error
+                $scope.notes[index].edit = 'error';
+                toaster.pop({
+                    type: 'error',
+                    title: 'Failed to save note. Please retry',
+                    timeout: 1500
+                });
             } else {
                 $scope.notes[index] = res.data.note;
-                $scope.notes[index].edit = false;
+                $scope.notes[index].tempContent = res.data.note.content;
+                $scope.notes[index].edit = true;
                 toaster.pop({
                     type: 'info',
                     title: 'Note Succesfully Updated',
@@ -141,7 +149,7 @@ myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $ht
         }, function errorCallback(response) {
             toaster.pop({
                 type: 'error',
-                title: 'Failed to save note',
+                title: response.data.error ? response.data.error : 'Failed to save note',
                 timeout: 1500
             });
         });

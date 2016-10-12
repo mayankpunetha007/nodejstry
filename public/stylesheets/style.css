@@ -1,49 +1,60 @@
 body {
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-    background: #f1f1f1;
+    background: snow;
 }
 
 .toolbar {
-    margin: 8px;
     position: absolute;
-    top: 8px;
-    right: 32px;
+    top: 7%;
+    right: 5%;
+    float: right;
+    z-index: 1;
+    color: #ffff99;
 }
 
 input {
-    margin: 16px 0px 0px 0px;
+    margin: 16px 0 0 0;
 }
 
 .note {
     background: #ffff99;
     border: 1px solid #FFFF36;
     border-radius: 8px;
-    overflow-y: auto;
+    overflow-y: hidden;
     margin: 32px;
     overflow-x: hidden;
     position: relative;
-    padding: 0px;
+    padding: 0;
     width: 320px;
     height: 320px;
     display: flex;
     flex-direction: column;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
 }
 
 .note-list {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    background: aliceblue;
+    background: #FFFFD2;
     width: 90%;
     margin: auto;
     min-height: 720px;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    border: 2px solid #FFFF36;
+    border-radius: 8px;
 }
 
-a{
-    cursor:pointer;
+a {
+    cursor: pointer;
 }
 
 .date {
@@ -59,15 +70,13 @@ a{
     height: 10%;
     font-weight: bold;
     margin: 2px;
-    overflow-x: visible;
-    overflow-y: auto;
+    overflow: visible;
 }
 
 .note-body {
     color: darkred;
-    overflow: auto;
-    height: 200px;
-    width: 318px;
+    height: 192px;
+    width: 312px;
     overflow-y: auto;
     overflow-x: visible;
     background: #ffff99;
@@ -90,6 +99,7 @@ a{
 .subject-modal {
     float: right;
     width: 240px;
+    z-index: 12;
 }
 
 .modal-body {
@@ -126,10 +136,9 @@ a{
 .container {
     width: 640px;
     height: 420px;
-    background: #ffff99;
-    border: 1px solid #FFFF36;
-    margin: auto;
-    margin-top: 160px;
+    background: #FFFF99;
+    border: 1px solid brown;
+    margin: 160px auto auto;
     padding: 32px;
     color: black;
     border-radius: 8px;
@@ -137,6 +146,11 @@ a{
     -moz-transition: opacity 1s ease-in-out;
     -o-transition: opacity 1s ease-in-out;
     transition: opacity 1s ease-in-out;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
 }
 
 .login-title {
@@ -156,9 +170,9 @@ a{
     z-index: 1;
     font-size: 4em;
     transform: rotate(270deg);
-    margin-top: -56px;
+    margin-top: -64px;
     margin-left: -58px;
-    color: darkred;
+    color: brown;
     margin-right: -8px;
 }
 
@@ -167,7 +181,7 @@ textarea:focus {
     border: 1px solid #FFFF36;
 }
 
-.tab-pane{
+.tab-pane {
     padding: 12px 48px;
     background: #FFFF8A;
     -webkit-transition: opacity 1s ease-in-out;
@@ -176,6 +190,61 @@ textarea:focus {
     transition: opacity 1s ease-in-out;
     height: 280px;
 }
-.btn{
-    margin:8px;
+
+.btn {
+    margin: 8px;
+}
+
+.icon-nice{
+    font-size: 4em;
+    margin-top: -40px;
+    margin-left: -58px;
+    color: darkred;
+}
+
+.tool-icon {
+    float: left;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .8;
+    display: table;
+    font-size: 32px;
+    font-weight: bolder;
+}
+.tool-icon.left{
+    float: left;
+    color: green;
+}
+.tool-icon.right{
+    float: right;
+    color: crimson;
+}
+.note-list-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.popuptext {
+    color: #71CBD0;
+    text-align: center;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 6;
+    top: 33px;
+    margin-left: -280px;
+    width: 364px;
+    height: 64px;
+    padding: 8px 0px 8px 8px;
+    -webkit-transition: opacity 1s ease-in-out;
+    -moz-transition: opacity 1s ease-in-out;
+    -o-transition: opacity 1s ease-in-out;
+    transition: opacity 1s ease-in-out;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
 }

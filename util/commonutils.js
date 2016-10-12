@@ -1,5 +1,5 @@
 var sha1 = require('sha1');
-var randomstring = require("randomstring");
+var randomstring = require('randomstring');
 
 exports.redirect = function (res, url) {
     res.redirect(url);
@@ -7,7 +7,7 @@ exports.redirect = function (res, url) {
 
 var activeUsers = {};
 
-exports.addUser = function (sessionId, user) {
+exports.addUserSession = function (sessionId, user) {
     activeUsers[sessionId] = user;
 };
 

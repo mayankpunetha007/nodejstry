@@ -1,12 +1,13 @@
 var model = require('./../model/model');
 var utils = require('./commonutils');
 
-exports.addUser = function (sessionId, res, user) {
+
+exports.addUser = function (res, user) {
     model.User.findOne({
         where: {email: user.email}
     }).then(function (userDb) {
-        if (userDb != null) {
-            res.send({"success": false});
+        if (userDb) {
+            res.send({'success': false});
         } else {
             var passwordHash = utils.getPasswordHash(user.salt, user.pass);
             model.User.create({
@@ -18,9 +19,9 @@ exports.addUser = function (sessionId, res, user) {
             res.send({'success': true});
         }
     }).catch(function (err) {
-        res.send({"success": false, "message": "internal server Error"});
+        console.log(err);
+        res.send({'success': false, 'message': 'internal server Error'});
     });
-    ;
 };
 
 
@@ -34,9 +35,9 @@ exports.fetchnotes = function (res, sessionId) {
         }
         res.send({'name': userDetails.name, 'noteList': noteList});
     }).catch(function (err) {
-        res.send({"success": false, "message": "internal server Error"});
+        console.log(err);
+        res.send({'success': false, 'message': 'internal server Error'});
     });
-    ;
 };
 
 exports.deletenote = function (res, sessionId, id) {
@@ -51,10 +52,11 @@ exports.deletenote = function (res, sessionId, id) {
             });
         }
         else {
-            res.status({'success': false, 'message': 'Is the note already deleted?'});
+            res.status(403).end();
         }
     }).catch(function (err) {
-        res.send({"success": false, "message": "internal server Error"});
+        console.log(err);
+        res.send({'success': false, 'message': 'internal server Error'});
     });
 };
 
@@ -66,9 +68,10 @@ exports.addnote = function (res, sessionId, subject, content) {
         content: content,
         userId: userDetails.id
     }).then(function (note) {
-        res.send({"success": true, "note": note});
+        res.send({'success': true, 'note': note});
     }).catch(function (err) {
-        res.send({"success": false, "message": "internal server Error"});
+        console.log(err);
+        res.send({'success': false, 'message': 'internal server Error'});
     });
 };
 
@@ -90,10 +93,11 @@ exports.updatenote = function (res, sessionId, noteId, noteContent) {
             }
         }
         else {
-            res.status(403);
+            res.status(403).end();
         }
     }).catch(function (err) {
-        res.send({"success": false, "message": "internal server Error"});
+        console.log(err);
+        res.send({'success': false, 'message': 'internal server Error'});
     });
 };
 
@@ -107,14 +111,15 @@ exports.logInUser = function (res, user) {
                 var salt = userFromDb.salt;
                 var passwordHash = utils.getPasswordHash(salt, user.password);
                 if (passwordHash === userFromDb.passwordhash) {
-                    utils.addUser(user.sessionId, userFromDb);
-                    res.send({"success": true});
+                    utils.addUserSession(user.sessionId, userFromDb);
+                    res.send({'success': true});
                     return;
                 }
             }
-            res.send({'success': false, 'message': "Username/Password Combination is invalid"});
+            res.send({'success': false, 'message': 'Username/Password Combination is invalid'});
         }).catch(function (err) {
-            res.send({"success": false, "message": "internal server Error"});
+            console.log(err);
+            res.send({'success': false, 'message': 'internal server Error'});
         });
     }
 };

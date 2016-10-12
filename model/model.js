@@ -1,6 +1,6 @@
 Sequelize = require('sequelize');
-var sequelize = new Sequelize('tasks', 'test', 'test123', {
-    dialect: "postgres", // or 'sqlite', 'postgres', 'mariadb'
+sequelize = new Sequelize('tasks', 'test', 'test123', {
+    dialect: 'postgres', // or 'sqlite', 'postgres', 'mariadb'
     port: 5432 // or 5432 (for postgres)
 });
 
