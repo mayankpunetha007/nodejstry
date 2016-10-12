@@ -21,14 +21,19 @@
 </header>
 <div class="note-list-container">
     <div class="toolbar">
-        <div class="glyphicon glyphicon glyphicon-plus tool-icon  left" id="new-button" title="Add a note" onclick="document.getElementById('subject').removeAttribute('hidden');">
+        <div class="glyphicon glyphicon glyphicon-plus tool-icon  left" id="new-button" title="Add a note"
+             onclick="document.getElementById('subject').removeAttribute('hidden');">
             <span id="subject" hidden class="popuptext">
-                <input type="text" style="width: 324px;word-spacing: -24px;" ng-model="subject" placeholder="Enter subject"/>
-                <span class="glyphicon glyphicon-ok" style="font-size: 16px; margin-top: -2px; color:green;" ng-click="newnote()"></span>
-                <span class="glyphicon glyphicon-remove" style="font-size: 16px; margin-top: -16px; color:crimson; " onclick="document.getElementById('subject').setAttribute('hidden','true');"></span>
+                <input type="text" style="width: 324px;word-spacing: -24px;" ng-model="subject"
+                       placeholder="Enter subject"/>
+                <span class="glyphicon glyphicon-ok" style="font-size: 16px; margin-top: -2px; color:green;"
+                      ng-click="newnote()"></span>
+                <span class="glyphicon glyphicon-remove" style="font-size: 16px; margin-top: -16px; color:crimson; "
+                      ng-click="hidePopup($event)"></span>
             </span>
         </div>
-        <div type="" class="glyphicon glyphicon-remove tool-icon right" data-toggle="popover" data-placement="left" title="Logout" id="new-logout" ng-click="logout()"></div>
+        <div type="" class="glyphicon glyphicon-remove tool-icon right" data-toggle="popover" data-placement="left"
+             title="Logout" id="new-logout" ng-click="logout()"></div>
     </div>
     <div class="note-list">
         <div class="note" ng-repeat="note in notes | orderBy:'createdOn'">
@@ -47,7 +52,8 @@
                 <div class="date">Last Edited: {{note.updatedAt| date:"dd MMMM, yyyy 'at' h:mm"}}</div>
             </div>
             <div class="subject">Subject: {{note.subject}}</div>
-            <textarea id="note-id-{{note.id}}" contentEditable=true data-text="Enter text here" class="note-body" ng-model="note.tempContent" ng-change="isChanged($index)">{{note.tempContent}}</textarea>
+            <textarea id="note-id-{{note.id}}" contentEditable=true data-text="Enter text here" class="note-body"
+                      ng-model="note.tempContent" ng-change="isChanged($index)">{{note.tempContent}}</textarea>
         </div>
     </div>
 </div>

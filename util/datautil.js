@@ -63,7 +63,7 @@ exports.deletenote = function (res, sessionId, id) {
 exports.addnote = function (res, sessionId, subject, content) {
     var userDetails = utils.getUserDetails(sessionId);
     model.note.create({
-        version: 0,
+        version: 1,
         subject: subject,
         content: content,
         userId: userDetails.id

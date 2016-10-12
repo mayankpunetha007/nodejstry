@@ -2,6 +2,17 @@ var myApp = angular.module('myApp', ['toaster']);
 
 myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $http, toaster) {
 
+
+    /**
+     * Hide popup
+     */
+    $scope.hidePopup = function ($event) {
+        document.getElementById('subject').setAttribute('hidden', true);
+        $scope.subject = '';
+        if ($event)
+            $event.stopPropagation();
+    };
+
     /**
      * Initialize Notes for the current logged in user
      */
@@ -31,13 +42,11 @@ myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $ht
                     timeout: 1500
                 });
             } else {
-                var input = document.getElementById('subject');
-                input.getElementsByTagName('input')[0].value = '';
-                input.setAttribute('hidden', 'true');
-                res.data.note.edit = false;
+                $scope.hidePopup();
+                res.data.note.edit = true;
                 $scope.notes.push(res.data.note);
                 toaster.pop({
-                    type: 'success',
+                    type: 'info',
                     title: 'Note Succesfully added',
                     timeout: 1500
                 });
@@ -82,6 +91,11 @@ myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $ht
                     });
                 } else {
                     $scope.notes.splice(i, 1);
+                    toaster.pop({
+                        type: 'info',
+                        title: 'Note successfully deleted',
+                        timeout: 1500
+                    });
                 }
             });
         }

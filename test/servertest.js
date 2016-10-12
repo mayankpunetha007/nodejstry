@@ -114,7 +114,7 @@ describe('Test User operations', function () {
             res.body.should.have.property('name', newUser.name);
             res.body.noteList[0].should.have.property('subject', 'This is a note');
             res.body.noteList[0].should.have.property('content', 'This is the body for the note');
-            res.body.noteList[0].should.have.property('version', 0);
+            res.body.noteList[0].should.have.property('version', 1);
             userNoteList = res.body.noteList;
             done();
         });
@@ -129,7 +129,7 @@ describe('Test User operations', function () {
             res.body.should.have.property('success', true);
             res.body.note.should.have.property('subject', 'This is a note');
             res.body.note.should.have.property('content', 'This is updated content');
-            res.body.note.should.have.property('version', 1);
+            res.body.note.should.have.property('version', 2);
             done();
         });
     });
