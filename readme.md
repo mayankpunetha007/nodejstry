@@ -3,20 +3,28 @@
 
 ## Using the application
 
-Edit model/model.js to setup database type and database info
---
-Default is database tasks with user test and password test123, THis application has been tested with postgres only
---
-After editing database type use npm install to add all dependencies to project
---
-Run node createdb to create all tables required by this project
---
-Run mocha on root directory to ensure all test cases are passing
---
-Run node start yo run the server
---
-Goto localhost:3000 and use the application
+### 1) Edit model/model.js to setup database type and database info
+
+### 2) Default is database tasks with user test and password test123, THis application has been tested with postgres only
+
+### 3) After editing database type use the following command to add all dependencies to project
+     ```npm install```
+
+### 4) Run following command to create all tables required by this project
+      ```node createdb```
+      
+### 5) Run mocha on root directory to ensure all test cases are passing
+     ```mocha```
+     
+### 6)  Run following command to start the server
+    ```node start```
+
+#Goto localhost:3000 and use the application
+
+#### Login page
 
 ![Alt Login Page View](/1.png?raw=true "Login Page")
-
+--
+#### Home page
 ![Alt Main Page View](/2.png?raw=true "Main Page View")
+--
