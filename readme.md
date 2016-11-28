@@ -3,9 +3,9 @@
 
 ## Using the application
 
-### 1) Edit model/model.js to setup database type and database info
+### 1) Edit package.json to setup database type and database info
 
-### 2) Default is database tasks with user test and password test123, THis application has been tested with postgres only
+### 2) Default is database tasks with user test and password test123, This application has been tested with postgres only
 
 ### 3) After editing database type use the following command to add all dependencies to project
      ```npm install```
@@ -17,7 +17,7 @@
      ```mocha```
      
 ### 6)  Run following command to start the server
-    ```node start```
+    ```npm start```
 
 #Goto localhost:3000 and use the application
 
