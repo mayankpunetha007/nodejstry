@@ -1,5 +1,5 @@
-var sha1 = require('sha1');
-var randomstring = require('randomstring');
+var sha1 = require('sha1'),
+    randomstring = require('randomstring');
 
 exports.redirect = function (res, url) {
     res.redirect(url);

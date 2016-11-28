@@ -11,19 +11,28 @@
   "main": "server.js",
   "version": "0.0.1",
   "dependencies": {
-    "cookie-parser": "1.4.3",
-    "sequelize": "3.24.3",
-    "morgan": "1.7.0",
-    "express": "4.14.0",
-    "mocha": "3.1.0",
-    "randomstring": "1.1.5",
-    "sha1": "1.1.1",
-    "body-parser": "1.15.2",
-    "express-session": "1.14.1",
-    "ejs": "2.5.2",
-    "should": "11.1.1",
-    "supertest": "2.0.0"
+    "cookie-parser": "~1.4.3",
+    "sequelize": "~3.24.3",
+    "morgan": "~1.7.0",
+    "express": "~4.14.0",
+    "mocha": "~3.1.0",
+    "randomstring": "~1.1.5",
+    "sha1": "~1.1.1",
+    "body-parser": "~1.15.2",
+    "express-session": "~1.14.1",
+    "ejs": "~2.5.2",
+    "should": "~11.1.1",
+    "supertest": "~2.0.0",
+    "uuid": "~3.0.0"
   },
   "createdb": "createdb.js",
-  "start": "server.js"
+  "start": "server.js",
+  "testapp": "mocha",
+  "dbProps":{
+    "db":"tasks",
+    "user":"test",
+    "pass":"test123",
+    "dialect":"postgres",
+    "port":5432
+  }
 }

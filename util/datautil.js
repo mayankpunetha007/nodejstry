@@ -1,5 +1,6 @@
-var model = require('./../model/model');
-var utils = require('./commonutils');
+var model = require('./../model/model'),
+    utils = require('./commonutils'),
+    uuid = require('uuid');
 
 
 exports.addUser = function (res, user) {
@@ -27,14 +28,16 @@ exports.addUser = function (res, user) {
 
 exports.fetchnotes = function (res, sessionId) {
     var userDetails = utils.getUserDetails(sessionId);
-    model.note.findAll({where: {userId: userDetails.id}}).then(function (dbResults) {
-        var noteList = [];
-        for (var result in dbResults) {
-            var noteInfo = dbResults[result].dataValues;
-            noteList.push(noteInfo);
-        }
-        res.send({'name': userDetails.name, 'noteList': noteList});
-    }).catch(function (err) {
+    model.seq.query('SELECT L."id",L."noteId",L."version", L."subject",L."content",L."createdAt",L."updatedAt" ,L."userId" FROM notes L LEFT JOIN notes R ON  L."noteId" = R."noteId" AND  L."createdAt" < R."createdAt" WHERE R."noteId" IS NULL AND L."userId" = ?',
+        { replacements : [userDetails.id], type : model.seq.QueryTypes.SELECT})
+        .then(function(dbResults) {
+            var noteList = [];
+            for (var result in dbResults) {
+                var noteInfo = dbResults[result];
+                noteList.push(noteInfo);
+            }
+            res.send({'name': userDetails.name, 'noteList': noteList});
+        }).catch(function (err) {
         console.log(err);
         res.send({'success': false, 'message': 'internal server Error'});
     });
@@ -47,7 +50,7 @@ exports.deletenote = function (res, sessionId, id) {
     }).then(function (dbnote) {
         if (dbnote) {
             var note = dbnote.dataValues;
-            model.note.destroy({where: {'id': note.id, 'userId': note.userId}}).then(function () {
+            model.note.destroy({where: {'noteId': note.noteId, 'userId': note.userId}}).then(function () {
                 res.send({'success': true});
             });
         }
@@ -64,6 +67,7 @@ exports.addnote = function (res, sessionId, subject, content) {
     var userDetails = utils.getUserDetails(sessionId);
     model.note.create({
         version: 1,
+        noteId: uuid(),
         subject: subject,
         content: content,
         userId: userDetails.id
@@ -75,20 +79,20 @@ exports.addnote = function (res, sessionId, subject, content) {
     });
 };
 
-exports.updatenote = function (res, sessionId, noteId, noteContent) {
+exports.updatenote = function (res, sessionId, note, noteContent) {
     var userDetails = utils.getUserDetails(sessionId);
-    model.note.findOne({
-        where: {id: noteId, userId: userDetails.id}
+    model.note.find({
+        where: {id: note.id, userId: userDetails.id}
     }).then(function (dbnote) {
         if (dbnote) {
-            var note = dbnote.dataValues;
-            if (note.content === noteContent) {
+            if (dbnote.content === noteContent) {
                 res.send({'success': false, 'message': 'Nothing to update'});
             } else {
-                model.note.update({content: noteContent, version: note.version + 1},
-                    {where: {id: note.id}, returning: true}).then(function (notes) {
-                    note = notes[1][0].dataValues;
-                    res.send({'success': true, 'note': note});
+                model.note.build({content : noteContent, noteId : dbnote.noteId, subject : dbnote.subject, version : dbnote.version + 1, userId : userDetails.id}).save().then(function(newNote) {
+                    res.send({'success': true, 'note': newNote});
+                }).catch(function(error) {
+                    console.log(err);
+                    res.send({'success': false, 'message': 'internal server Error'});
                 });
             }
         }

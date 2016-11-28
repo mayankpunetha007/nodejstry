@@ -19,12 +19,15 @@ myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $ht
     $scope.init = function () {
         $http.get('/getnoteList').then(function (res) {
             var notes = res.data.noteList;
+            notes.sort(function(a, b) {
+                return new Date(b.createdAt) - new Date(a.createdAt)
+            });
             for (var i = 0; i < notes.length; i++) {
                 notes[i]['edit'] = true;
                 notes[i]['tempContent'] = notes[i].content;
             }
             $scope.name = res.data.name;
-            $scope.notes = res.data.noteList;
+            $scope.notes = notes;
 
         });
     };
@@ -142,7 +145,7 @@ myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $ht
         }
         var id = $scope.notes[index].id;
         var newContent = document.getElementById('note-id-' + id).value;
-        $http.post('/updatenote', {'id': id, 'content': newContent}).then(function (res) {
+        $http.post('/updatenote', {'note': $scope.notes[index], 'content': newContent}).then(function (res) {
             if (!res.data.success) {
                 $scope.notes[index].edit = 'error';
                 toaster.pop({
@@ -153,6 +156,7 @@ myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $ht
             } else {
                 $scope.notes[index] = res.data.note;
                 $scope.notes[index].tempContent = res.data.note.content;
+                $scope.notes[index].content = res.data.note.content;
                 $scope.notes[index].edit = true;
                 toaster.pop({
                     type: 'info',
@@ -169,6 +173,11 @@ myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $ht
         });
 
         $scope.notes[index].edit = 'error';
+    };
+
+    $scope.noteVisible = function(){
+        document.getElementById('subject').removeAttribute('hidden');
+        document.getElementById('subject-input').focus();
     };
 
 

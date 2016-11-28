@@ -1,34 +1,40 @@
 var model = require('./../model/model'),
-    commonutils = require('./../util/commonutils'),
+    commonUtils = require('./../util/commonutils'),
     server = require('./../server'),
-    supertest = require('supertest'),
+    superTest = require('supertest'),
     should = require('should'),
-    agent = supertest.agent(server);
+    agent = superTest.agent(server);
 
 describe('Test User operations', function () {
 
     var newUser = {
         name: 'Mayank Punetha',
-        email: commonutils.generateRandomString(10),
-        pass: commonutils.generateRandomString(12)
+        email: commonUtils.generateRandomString(10),
+        pass: commonUtils.generateRandomString(12)
     };
 
     var anotherUser = {
         name: 'Mayank Punetha',
-        email: commonutils.generateRandomString(10),
-        pass: commonutils.generateRandomString(12)
+        email: commonUtils.generateRandomString(10),
+        pass: commonUtils.generateRandomString(12)
     };
 
     var userNoteList = [];
 
     after(function (done) {
-        model.User.destroy({where: {'email': newUser.email}}).then(function () {
-            model.User.destroy({where: {'email': anotherUser.email}}).then(function () {
-                done();
+        model.User.find({where: {'email': newUser.email}}).then(function (newUser) {
+            model.User.find({where: {'email': anotherUser.email}}).then(function (anotherUser) {
+                model.note.destroy({where: {'userId': newUser.id}}).then(function () {
+                    model.note.destroy({where: {'userId': anotherUser.id}}).then(function () {
+                        model.User.destroy({where: {'email': newUser.email}}).then(function () {
+                            model.User.destroy({where: {'email': anotherUser.email}}).then(function () {
+                                done();
+                            });
+                        });
+                    });
+                });
             });
         });
-
-
     });
 
     it('Try fetching Notes without login', function (done) {
@@ -120,9 +126,9 @@ describe('Test User operations', function () {
         });
     });
 
-    it('Update the first Note', function (done) {
+    it('Update the first Note should result in new id as new entry will be added', function (done) {
         agent.post('/updatenote').send({
-            'id': userNoteList[0].id,
+            'note': userNoteList[0],
             'content': 'This is updated content'
         }).then(function (res) {
             res.should.have.property('statusCode', 200);
@@ -130,7 +136,11 @@ describe('Test User operations', function () {
             res.body.note.should.have.property('subject', 'This is a note');
             res.body.note.should.have.property('content', 'This is updated content');
             res.body.note.should.have.property('version', 2);
-            done();
+            console.log(userNoteList[0].id + ' '+res.body.note.id);
+            if(userNoteList[0].id != res.body.note.id) {
+                userNoteList[0] = res.body.note;
+                done();
+            }
         });
     });
 
@@ -173,7 +183,7 @@ describe('Test User operations', function () {
 
     it('Try to update new user content, Should result in forbidden', function (done) {
         agent.post('/updatenote').send({
-            'id': userNoteList[0].id,
+            'note': userNoteList[0],
             'content': 'This is updated content From another user'
         }).then(function (res) {
             res.should.have.property('statusCode', 403);
@@ -185,6 +195,18 @@ describe('Test User operations', function () {
         agent.post('/deletenote').send({'id': userNoteList[0].id}).then(function (res) {
             res.should.have.property('statusCode', 403);
             done();
+        });
+    });
+
+    it('Check all notes present from all versions', function (done) {
+        model.User.find({where: {'email': newUser.email}}).then(function (newUser) {
+            model.note.count({where: {"userId": newUser.id}}).then(function (c) {
+                if(c==2){
+                    done();
+                }else{
+                   console.log(c);
+                }
+            })
         });
     });
 

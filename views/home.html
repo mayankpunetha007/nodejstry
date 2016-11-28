@@ -22,9 +22,9 @@
 <div class="note-list-container">
     <div class="toolbar">
         <div class="glyphicon glyphicon glyphicon-plus tool-icon  left" id="new-button" title="Add a note"
-             onclick="document.getElementById('subject').removeAttribute('hidden');">
+             ng-click="noteVisible()">
             <span id="subject" hidden class="popuptext">
-                <input type="text" style="width: 324px;word-spacing: -24px;" ng-model="subject"
+                <input id="subject-input" type="text" ng-keydown="$event.which === 13 && newnote()" style="width: 324px;word-spacing: -24px;" ng-model="subject"
                        placeholder="Enter subject"/>
                 <span class="glyphicon glyphicon-ok" style="font-size: 16px; margin-top: -2px; color:green;"
                       ng-click="newnote()"></span>
@@ -48,12 +48,11 @@
             </div>
             <div class="banner">
                 <div class="version">version {{note.version}}</div>
-                <div class="date">Created On: {{note.createdAt | date:"dd MMMM, yyyy 'at' h:mm"}}</div>
                 <div class="date">Last Edited: {{note.updatedAt| date:"dd MMMM, yyyy 'at' h:mm"}}</div>
             </div>
             <div class="subject">Subject: {{note.subject}}</div>
             <textarea id="note-id-{{note.id}}" contentEditable=true data-text="Enter text here" class="note-body"
-                      ng-model="note.tempContent" ng-change="isChanged($index)">{{note.tempContent}}</textarea>
+                      ng-model="note.tempContent" ng-change="isChanged($index)" >{{note.tempContent}}</textarea>
         </div>
     </div>
 </div>

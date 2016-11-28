@@ -9,36 +9,14 @@
     <script src="https://code.angularjs.org/1.2.0/angular-animate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.js"></script>
     <script src="js/login.js"></script>
-    <script>
-        /**
-         * Show Registeration form
-         */
-        register = function (status) {
-            var hide = 'login-form';
-            var show = 'registration-form';
-            var active = 'register-tab';
-            var inactive = 'login-tab';
-            if (status == false) {
-                hide = 'registration-form';
-                show = 'login-form';
-                active = 'login-tab';
-                inactive = 'register-tab';
-            }
-            document.getElementById(hide).setAttribute('hidden', 'true');
-            document.getElementById(show).removeAttribute('hidden');
-            document.getElementById(active).classList.add('active');
-            document.getElementById(inactive).classList.remove('active');
-
-        };
-    </script>
 </head>
 <body ng-app="myApp">
 <div class="container" ng-controller="LoginCtrl">
     <div class="login-title"><i class="glyphicon glyphicon-pushpin icon-large"></i>Your personal Note Keeper</div>
     <toaster-container toaster-options="{'time-out': 1000}"></toaster-container>
     <ul class="nav nav-tabs">
-        <li id="login-tab" class="active"><a onclick="register(false)">Login</a></li>
-        <li id="register-tab"><a onclick="register(true);">Register</a></li>
+        <li id="login-tab" class="active"><a ng-click="register(false)">Login</a></li>
+        <li id="register-tab"><a ng-click="register(true);">Register</a></li>
     </ul>
 
     <div id="login-form" class="tab-pane fade in active">

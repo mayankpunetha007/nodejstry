@@ -1,11 +1,11 @@
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
-var datautil = require('./util/datautil');
-var commonutils = require('./util/commonutils');
-var session = require('express-session');
-var cookieParser = require('cookie-parser');
-var morgan = require('morgan');
+var express = require('express'),
+    app = express(),
+    bodyParser = require('body-parser'),
+    datautil = require('./util/datautil'),
+    commonutils = require('./util/commonutils'),
+    session = require('express-session'),
+    cookieParser = require('cookie-parser'),
+    morgan = require('morgan');
 
 app.use(morgan('dev'));
 
@@ -49,7 +49,7 @@ app.use('/*', function (req, res, next) {
  * Get all notes for currently logged in user
  */
 app.get('/getnoteList', function (req, res) {
-    datautil.fetchnotes(res, req.session.id, req.body.from);
+    datautil.fetchnotes(res, req.session.id);
 });
 
 /**
@@ -84,7 +84,7 @@ app.post('/addnote', function (req, res) {
  * Update the content of an existing note
  */
 app.post('/updatenote', function (req, res) {
-    datautil.updatenote(res, req.session.id, req.body.id, req.body.content);
+    datautil.updatenote(res, req.session.id, req.body.note, req.body.content);
 });
 
 /**

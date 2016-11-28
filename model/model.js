@@ -1,17 +1,18 @@
-Sequelize = require('sequelize');
-sequelize = new Sequelize('tasks', 'test', 'test123', {
-    dialect: 'postgres', // or 'sqlite', 'postgres', 'mariadb'
-    port: 5432 // or 5432 (for postgres)
+var dbProps = require('./../package.json').dbProps,
+    Sequelize = require('sequelize'),
+    seq = new Sequelize(dbProps.db, dbProps.user, dbProps.pass, {
+        dialect: dbProps.dialect,
+        port: dbProps.port
 });
 
 
-sequelize.authenticate().then(function () {
+seq.authenticate().then(function () {
     console.log('Database Connection has been established successfully.');
 }, function (err) {
     console.log('Unable to connect to the database:', err);
 });
 
-var User = sequelize.define('user', {
+var User = seq.define('user', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -36,11 +37,14 @@ var User = sequelize.define('user', {
     }
 });
 
-var note = sequelize.define('note', {
+var note = seq.define('note', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
+    },
+    noteId:{
+        type: Sequelize.UUID,
     },
     version: {
         type: Sequelize.INTEGER
@@ -55,7 +59,8 @@ var note = sequelize.define('note', {
 
 User.hasMany(note, {onDelete: 'SET NULL', onUpdate: 'CASCADE'});
 
-exports.note = note;
-exports.User = User;
-
-exports.seq = sequelize;
+module.exports = {
+    "note" : note,
+    "User" : User,
+    "seq" : seq
+};

@@ -1,6 +1,28 @@
 var myApp = angular.module('myApp', ['toaster']);
 myApp.controller('LoginCtrl', ['$scope', '$http', 'toaster', function ($scope, $http, toaster) {
 
+
+    /**
+     * Show Registeration form
+     */
+    $scope.register = function (status) {
+
+            var hide = 'login-form';
+            var show = 'registration-form';
+            var active = 'register-tab';
+            var inactive = 'login-tab';
+            if (status == false) {
+                hide = 'registration-form';
+                show = 'login-form';
+                active = 'login-tab';
+                inactive = 'register-tab';
+            }
+            document.getElementById(hide).setAttribute('hidden', 'true');
+            document.getElementById(show).removeAttribute('hidden');
+            document.getElementById(active).classList.add('active');
+            document.getElementById(inactive).classList.remove('active');
+
+    };
     /**
      * Gather user details and register
      */
@@ -25,7 +47,7 @@ myApp.controller('LoginCtrl', ['$scope', '$http', 'toaster', function ($scope, $
                     timeout: 1500
                 });
             } else {
-                register(false);
+                $scope.register(false);
                 toaster.pop({
                     type: 'success',
                     title: 'User Registered Please login!',
