@@ -2,7 +2,7 @@ var myApp = angular.module('myApp', ['toaster']);
 
 myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $http, toaster) {
 
-
+    $scope.notes =[];
     /**
      * Hide popup
      */
@@ -30,6 +30,74 @@ myApp.controller('AppCtrl', ['$scope', '$http', 'toaster', function ($scope, $ht
             $scope.notes = notes;
 
         });
+    };
+
+    /**
+     * Undo the current Note
+     */
+    $scope.redo = function (index) {
+        $http.post('/redo', {'note': $scope.notes[index]}).then(function (res) {
+            if (!res.data.success) {
+                $scope.notes[index].edit = 'error';
+                toaster.pop({
+                    type: 'error',
+                    title: res.data.message ? res.data.message : 'Failed to add note',
+                    timeout: 1500
+                });
+            } else {
+                $scope.notes[index] = res.data.note;
+                $scope.notes[index].tempContent = res.data.note.content;
+                $scope.notes[index].content = res.data.note.content;
+                $scope.notes[index].edit = true;
+                toaster.pop({
+                    type: 'info',
+                    title: 'Note Succesfully Updated',
+                    timeout: 1500
+                });
+            }
+        }, function errorCallback(response) {
+            toaster.pop({
+                type: 'error',
+                title: response.data.error ? response.data.error : 'Failed to save note',
+                timeout: 1500
+            });
+        });
+
+        $scope.notes[index].edit = 'error';
+    };
+
+    /**
+     * Redo the current note
+     */
+    $scope.undo = function (index) {
+        $http.post('/undo', {'note': $scope.notes[index]}).then(function (res) {
+            if (!res.data.success) {
+                $scope.notes[index].edit = 'error';
+                toaster.pop({
+                    type: 'error',
+                    title: res.data.message ? res.data.message : 'Failed to add note',
+                    timeout: 1500
+                });
+            } else {
+                $scope.notes[index] = res.data.note;
+                $scope.notes[index].tempContent = res.data.note.content;
+                $scope.notes[index].content = res.data.note.content;
+                $scope.notes[index].edit = true;
+                toaster.pop({
+                    type: 'info',
+                    title: 'Note Succesfully Updated',
+                    timeout: 1500
+                });
+            }
+        }, function errorCallback(response) {
+            toaster.pop({
+                type: 'error',
+                title: response.data.error ? response.data.error : 'Failed to save note',
+                timeout: 1500
+            });
+        });
+
+        $scope.notes[index].edit = 'error';
     };
 
     /**

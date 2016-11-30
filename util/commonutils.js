@@ -26,6 +26,30 @@ exports.checkAuth = function (req, res, next) {
     }
 };
 
+
+exports.refineSingleNote = function(noteInfo) {
+    noteInfo['id'] = noteInfo['noteId'];
+    delete noteInfo['noteId'];
+    return noteInfo;
+
+};
+
+exports.refineNotes = function(noteInfo) {
+    noteInfo['content'] = noteInfo['currentContent'];
+    noteInfo['subject'] = noteInfo['currentSubject'];
+    noteInfo['version'] = noteInfo['currentVersion'];
+    delete noteInfo['order'];
+    delete noteInfo['latestVersion'];
+    delete noteInfo['latestOrder'];
+    delete noteInfo['currentContent'];
+    delete noteInfo['currentSubject'];
+    delete noteInfo['currentVersion'];
+    delete noteInfo['currentNoteId'];
+    return noteInfo;
+
+};
+
+
 exports.getUserDetails = function (sessionId) {
     return activeUsers[sessionId];
 };
