@@ -19,16 +19,20 @@ describe('Test User operations', function () {
         pass: commonUtils.generateRandomString(12)
     };
 
+    var prevNote;
+
     var userNoteList = [];
 
     after(function (done) {
         model.User.find({where: {'email': newUser.email}}).then(function (newUser) {
             model.User.find({where: {'email': anotherUser.email}}).then(function (anotherUser) {
-                model.note.destroy({where: {'userId': newUser.id}}).then(function () {
-                    model.note.destroy({where: {'userId': anotherUser.id}}).then(function () {
+                model.notes.destroy({where: {'userId': newUser.id}}).then(function () {
+                    model.notes.destroy({where: {'userId': anotherUser.id}}).then(function () {
                         model.User.destroy({where: {'email': newUser.email}}).then(function () {
                             model.User.destroy({where: {'email': anotherUser.email}}).then(function () {
-                                done();
+                                model.singleNote.destroy({where: {'noteId': null}}).then(function () {
+                                    done();
+                                });
                             });
                         });
                     });
@@ -93,6 +97,7 @@ describe('Test User operations', function () {
             'subject': 'This is a note',
             'content': 'This is the body for the note'
         }).then(function (res) {
+            console.log(res.body.note);
             res.should.have.property('statusCode', 200);
             res.body.should.have.property('success', true);
             res.body.note.should.have.property('subject', 'This is a note');
@@ -114,6 +119,77 @@ describe('Test User operations', function () {
         });
     });
 
+    it('Undo/Redo operation Test', function (done) {
+        agent.post('/addnote').send({
+            'subject': 'This is before note',
+            'content': '1'
+        }).then(function (res) {
+            console.log(res.body.note);
+            res.should.have.property('statusCode', 200);
+            res.body.should.have.property('success', true);
+            res.body.note.should.have.property('subject', 'This is before note');
+            res.body.note.should.have.property('content', '1');
+            var beforeNote = res.body.note;
+            agent.post('/updatenote').send({
+                'note': beforeNote,
+                'content': '2'
+            }).then(function (res) {
+                console.log(res.body.note);
+                res.should.have.property('statusCode', 200);
+                res.body.should.have.property('success', true);
+                res.body.note.should.have.property('subject', 'This is before note');
+                res.body.note.should.have.property('content', '2');
+                var afterNote = res.body.note;
+                agent.post('/undo').send({
+                    'note': afterNote,
+                }).then(function (res) {
+                    console.log(res.body.note);
+                    res.should.have.property('statusCode', 200);
+                    res.body.should.have.property('success', true);
+                    res.body.note.should.have.property('subject', 'This is before note');
+                    res.body.note.should.have.property('content', '1');
+                    agent.post('/redo').send({
+                        'note': beforeNote,
+                    }).then(function (res) {
+                        console.log(4);
+                        res.should.have.property('statusCode', 200);
+                        res.body.should.have.property('success', true);
+                        res.body.note.should.have.property('subject', 'This is before note');
+                        res.body.note.should.have.property('content', '2');
+                        agent.post('/undo').send({
+                            'note': res.body.note,
+                        }).then(function (res) {
+                            res.should.have.property('statusCode', 200);
+                            res.body.should.have.property('success', true);
+                            res.body.note.should.have.property('subject', 'This is before note');
+                            res.body.note.should.have.property('content', '1');
+                            agent.post('/updatenote').send({
+                                'note': beforeNote,
+                                'content': '3'
+                            }).then(function (res) {
+                                res.should.have.property('statusCode', 200);
+                                res.body.should.have.property('success', true);
+                                res.body.note.should.have.property('subject', 'This is before note');
+                                res.body.note.should.have.property('content', '3');
+                                agent.post('/undo').send({
+                                    'note': res.body.note,
+                                }).then(function (res) {
+                                    res.should.have.property('statusCode', 200);
+                                    res.body.should.have.property('success', true);
+                                    res.body.note.should.have.property('subject', 'This is before note');
+                                    res.body.note.should.have.property('content', '1');
+                                    done();
+                                });
+                            });
+                        });
+
+                        });
+                    });
+                });
+
+            });
+        });
+
     it('Fetch User Notes and check value', function (done) {
         agent.get('/getnoteList').then(function (res) {
             res.should.have.property('statusCode', 200);
@@ -126,7 +202,8 @@ describe('Test User operations', function () {
         });
     });
 
-    it('Update the first Note should result in new id as new entry will be added', function (done) {
+    it('Update the first Note should result in the same id as new entry will be added', function (done) {
+        console.log(userNoteList[0]);
         agent.post('/updatenote').send({
             'note': userNoteList[0],
             'content': 'This is updated content'
@@ -135,10 +212,12 @@ describe('Test User operations', function () {
             res.body.should.have.property('success', true);
             res.body.note.should.have.property('subject', 'This is a note');
             res.body.note.should.have.property('content', 'This is updated content');
-            res.body.note.should.have.property('version', 2);
-            console.log(userNoteList[0].id + ' '+res.body.note.id);
-            if(userNoteList[0].id != res.body.note.id) {
-                userNoteList[0] = res.body.note;
+            if(userNoteList[0].id == res.body.note.id) {
+                console.log(res.body.note);
+                res.should.have.property('statusCode', 200);
+                res.body.note.should.have.property('subject', 'This is a note');
+                res.body.note.should.have.property('content', 'This is updated content');
+                res.body.note.should.have.property('version', 3);
                 done();
             }
         });
@@ -195,18 +274,6 @@ describe('Test User operations', function () {
         agent.post('/deletenote').send({'id': userNoteList[0].id}).then(function (res) {
             res.should.have.property('statusCode', 403);
             done();
-        });
-    });
-
-    it('Check all notes present from all versions', function (done) {
-        model.User.find({where: {'email': newUser.email}}).then(function (newUser) {
-            model.note.count({where: {"userId": newUser.id}}).then(function (c) {
-                if(c==2){
-                    done();
-                }else{
-                   console.log(c);
-                }
-            })
         });
     });
 

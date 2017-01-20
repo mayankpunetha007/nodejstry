@@ -45,6 +45,8 @@
                 <i class="glyphicon glyphicon-warning-sign danger" ng-click="update($index)" title="Failed Retry?"
                    ng-if="note.edit === 'error'"></i>
                 <i class="glyphicon glyphicon-trash del" title="Delete" ng-click="delete($index)"></i></span>
+                <i class="glyphicon glyphicon-triangle-right" title="redo" ng-click="redo($index)"></i>
+                <i class="glyphicon glyphicon-triangle-left" title="undo" ng-click="undo($index)"></i>
             </div>
             <div class="banner">
                 <div class="version">version {{note.version}}</div>

@@ -37,14 +37,38 @@ var User = seq.define('user', {
     }
 });
 
-var note = seq.define('note', {
+var notes = seq.define('notes', {
     id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    noteId:{
         type: Sequelize.UUID,
+        primaryKey: true,
+    },
+    currentNoteId:{
+        type: Sequelize.UUID,
+    },
+    currentVersion: {
+        type: Sequelize.INTEGER
+    },
+    currentSubject: {
+        type: Sequelize.STRING
+    },
+    currentContent: {
+        type: Sequelize.TEXT
+    },
+    latestVersion: {
+        type: Sequelize.INTEGER
+    },
+    order:{
+        type: Sequelize.JSON
+    },
+    latestOrder:{
+        type: Sequelize.INTEGER
+    }
+});
+
+var singleNote = seq.define('singleNote', {
+    id: {
+        type: Sequelize.UUID,
+        primaryKey: true,
     },
     version: {
         type: Sequelize.INTEGER
@@ -57,10 +81,12 @@ var note = seq.define('note', {
     }
 });
 
-User.hasMany(note, {onDelete: 'SET NULL', onUpdate: 'CASCADE'});
+User.hasMany(notes, {onDelete: 'SET NULL', onUpdate: 'CASCADE'});
+notes.hasMany(singleNote, {onDelete: 'SET NULL', onUpdate: 'CASCADE'});
 
 module.exports = {
-    "note" : note,
+    "singleNote" : singleNote,
     "User" : User,
+    "notes" : notes,
     "seq" : seq
 };

@@ -49,7 +49,7 @@ app.use('/*', function (req, res, next) {
  * Get all notes for currently logged in user
  */
 app.get('/getnoteList', function (req, res) {
-    datautil.fetchnotes(res, req.session.id);
+    datautil.fetchNotes(res, req.session.id);
 });
 
 /**
@@ -85,6 +85,20 @@ app.post('/addnote', function (req, res) {
  */
 app.post('/updatenote', function (req, res) {
     datautil.updatenote(res, req.session.id, req.body.note, req.body.content);
+});
+
+/**
+ * Undo from the current note
+ */
+app.post('/undo', function (req, res) {
+    datautil.undo(res, req.session.id, req.body.note);
+});
+
+/**
+ * Redo from the current note
+ */
+app.post('/redo', function (req, res) {
+    datautil.redo(res, req.session.id, req.body.note);
 });
 
 /**
